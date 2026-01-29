@@ -4,7 +4,7 @@
 @section('page-title', 'Notifications')
 
 @section('breadcrumb')
-    <li class="breadcrumb-item"><a href="{{ route('home') }}">Dashboard</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('dashboard.ssgs') }}">Dashboard</a></li>
     <li class="breadcrumb-item active" aria-current="page">Notifications</li>
 @endsection
 

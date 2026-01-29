@@ -13,7 +13,7 @@
 
     <div class="card shadow-sm">
         <div class="card-body">
-            <form method="POST" action="{{ route('wilayah.update',$wilayah->id) }}">
+            <form method="POST" action="{{ route('data-wilayah-gs.update',$wilayah->id) }}">
                 @csrf @method('PUT')
 
                 <div class="mb-3">
@@ -31,7 +31,7 @@
                 </div>
 
                 <div class="text-end">
-                    <a href="{{ route('wilayah.index') }}"
+                    <a href="{{ route('data-wilayah-gs.index') }}"
                        class="btn btn-secondary">Batal</a>
                     <button class="btn btn-primary">Update</button>
                 </div>

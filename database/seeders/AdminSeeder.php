@@ -14,12 +14,14 @@ class AdminSeeder extends Seeder
      */
     public function run(): void
     {
-        User::create([
-            'name' => 'Administrator',
-            'email' => 'admin@telkom.com',
-            'password' => Hash::make('password'),
-            'role' => 'admin',
-            'phone' => '081234567890',
-        ]);
+        User::firstOrCreate(
+            ['email' => 'admin@telkom.com'],
+            [
+                'name' => 'Administrator',
+                'password' => Hash::make('password'),
+                'role' => 'admin',
+                'phone' => '081234567890',
+            ]
+        );
     }
 }

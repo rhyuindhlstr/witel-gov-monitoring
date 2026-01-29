@@ -56,6 +56,12 @@ class KunjunganPelangganSeeder extends Seeder
         $processedPelangganMonth = []; // Track pelanggan-month to ensure 1 visit per month
         
         foreach ($pembayaranTertunda as $pembayaran) {
+            $pelanggans = \App\Models\Pelanggan::all();
+
+        if ($pelanggans->isEmpty()) {
+            $this->command->info('Skipping Kunjungan seeding because Pelanggan data is empty.');
+            return;
+        }
             $pelanggan = $pembayaran->pelanggan;
             $tanggalJatuhTempo = $pembayaran->tanggal_jatuh_tempo;
             

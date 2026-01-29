@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\PeluangProyekGS;
-use App\Models\Wilayah;
+use App\Models\WilayahGS;
 use App\Models\PeluangProyekGSLog;
 use App\Exports\PeluangProyekGSExport;
 use Illuminate\Http\Request;
@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use Barryvdh\DomPDF\Facade\Pdf;
 
+// Controller for GS Projects
 class PeluangProyekGSController extends Controller
 {
     public function index(Request $request)
@@ -23,14 +24,14 @@ class PeluangProyekGSController extends Controller
             ->latest()
             ->get();
 
-        $wilayahs = Wilayah::all();
+        $wilayahs = WilayahGS::all();
 
         return view('peluang-gs.index', compact('peluang', 'wilayahs'));
     }
 
     public function create()
     {
-        $wilayahs = Wilayah::orderBy('nama_wilayah')->get();
+        $wilayahs = WilayahGS::orderBy('nama_wilayah')->get();
         return view('peluang-gs.create', compact('wilayahs'));
     }
 
@@ -64,14 +65,14 @@ class PeluangProyekGSController extends Controller
 
     public function edit(PeluangProyekGS $peluang_g)
     {
-        $wilayahs = Wilayah::all();
+        $wilayahs = WilayahGS::all();
         return view('peluang-gs.edit', compact('peluang_g','wilayahs'));
     }
 
 public function update(Request $request, PeluangProyekGS $peluang_g)
 {
     $request->validate([
-        'wilayah_id'    => 'required|exists:wilayahs,id',
+        'wilayah_id'    => 'required|exists:wilayah_g_s,id',
         'judul_proyek'  => 'required|string',
         'status_proyek' => 'required|string',
     ]);

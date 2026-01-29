@@ -41,7 +41,7 @@ class PeluangProyekGS extends Model
     public function wilayah()
     {
         return $this->belongsTo(
-            \App\Models\Wilayah::class,
+            \App\Models\WilayahGS::class,
             'wilayah_id'
         );
     }

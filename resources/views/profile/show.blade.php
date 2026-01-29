@@ -4,7 +4,7 @@
 @section('page-title', 'My Profile')
 
 @section('breadcrumb')
-    <li class="breadcrumb-item"><a href="{{ route('home') }}">Dashboard</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('dashboard.ssgs') }}">Dashboard</a></li>
     <li class="breadcrumb-item active" aria-current="page">Profile</li>
 @endsection
 

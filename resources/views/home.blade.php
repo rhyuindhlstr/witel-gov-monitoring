@@ -22,7 +22,7 @@
                 <button class="btn btn-sm btn-white border bg-white text-muted shadow-sm dropdown-toggle" type="button" id="periodFilter" data-bs-toggle="dropdown">
                     Last 30 days
                 </button>
-                <ul class="dropdown-menu">
+                <ul class="dropdown-menu" id="periodFilterMenu">
                     <li><a class="dropdown-item" href="#" data-days="7">Last 7 days</a></li>
                     <li><a class="dropdown-item active" href="#" data-days="30">Last 30 days</a></li>
                     <li><a class="dropdown-item" href="#" data-days="60">Last 60 days</a></li>
@@ -376,7 +376,7 @@
         }
         
         // Period Filter Dropdown
-        const periodItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
+        const periodItems = document.querySelectorAll('#periodFilterMenu .dropdown-item');
         periodItems.forEach(item => {
             item.addEventListener('click', function(e) {
                 e.preventDefault();

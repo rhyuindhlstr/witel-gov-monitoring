@@ -2,21 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Wilayah;
+use App\Models\WilayahGS;
 use Illuminate\Http\Request;
 
-class WilayahController extends Controller
+class WilayahGSController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $wilayahs = Wilayah::all();
-        
-
-
-        return view('admin.wilayah.index', compact('wilayahs'));
+        $wilayahs = WilayahGS::all();
+        return view('wilayah-gs.index', compact('wilayahs'));
     }
 
     /**
@@ -24,9 +21,7 @@ class WilayahController extends Controller
      */
     public function create()
     {
-
-
-        return view('admin.wilayah.create');
+        return view('wilayah-gs.create');
     }
 
     /**
@@ -36,20 +31,19 @@ class WilayahController extends Controller
     {
         $validated = $request->validate([
             'nama_wilayah' => 'required|string|max:255',
-            'code'         => 'nullable|string|max:255',
             'keterangan'   => 'nullable|string',
         ]);
 
-        Wilayah::create($validated);
+        WilayahGS::create($validated);
 
-        return redirect()->route('wilayah.index')
-            ->with('success', 'Wilayah successfully created.');
+        return redirect()->route('data-wilayah-gs.index')
+            ->with('success', 'Wilayah GS successfully created.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Wilayah $wilayah)
+    public function show(WilayahGS $data_wilayah_g)
     {
         //
     }
@@ -57,38 +51,35 @@ class WilayahController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Wilayah $wilayah)
+    public function edit(WilayahGS $data_wilayah_g)
     {
-
-
-        return view('admin.wilayah.edit', compact('wilayah'));
+        return view('wilayah-gs.edit', ['wilayah' => $data_wilayah_g]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Wilayah $wilayah)
+    public function update(Request $request, WilayahGS $data_wilayah_g)
     {
         $validated = $request->validate([
             'nama_wilayah' => 'required|string|max:255',
-            'code'         => 'nullable|string|max:255',
             'keterangan'   => 'nullable|string',
         ]);
 
-        $wilayah->update($validated);
+        $data_wilayah_g->update($validated);
 
-        return redirect()->route('wilayah.index')
-            ->with('success', 'Wilayah successfully updated.');
+        return redirect()->route('data-wilayah-gs.index')
+            ->with('success', 'Wilayah GS successfully updated.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Wilayah $wilayah)
+    public function destroy(WilayahGS $data_wilayah_g)
     {
-        $wilayah->delete();
+        $data_wilayah_g->delete();
 
-        return redirect()->route('wilayah.index')
-            ->with('success', 'Wilayah successfully deleted.');
+        return redirect()->route('data-wilayah-gs.index')
+            ->with('success', 'Wilayah GS successfully deleted.');
     }
 }

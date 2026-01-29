@@ -1,4 +1,4 @@
-@extends(Auth::user()->role === 'admin' ? 'layouts.admin' : 'layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Tambah Wilayah')
 @section('page-title', 'Tambah Wilayah')
@@ -20,10 +20,11 @@
                     <form action="{{ route('wilayah.store') }}" method="POST">
                         @csrf
                         <div class="mb-3">
-                            <label for="name" class="form-label">Nama Wilayah <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control @error('name') is-invalid @enderror" id="name"
-                                name="name" value="{{ old('name') }}" placeholder="Contoh: Witel Lampung" required>
-                            @error('name')
+
+                            <label for="nama_wilayah" class="form-label">Nama Wilayah <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control @error('nama_wilayah') is-invalid @enderror" id="nama_wilayah"
+                                name="nama_wilayah" value="{{ old('nama_wilayah') }}" placeholder="Contoh: Witel Lampung" required>
+                            @error('nama_wilayah')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>

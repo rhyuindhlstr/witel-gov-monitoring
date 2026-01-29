@@ -31,7 +31,7 @@ class LoginController extends Controller
             return route('dashboard');
         }
 
-        return route('home');
+        return route('dashboard.ssgs');
     }
 
     /**

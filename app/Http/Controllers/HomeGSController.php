@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\PeluangProyekGS;
 use App\Models\AktivitasMarketing;
-use App\Models\Wilayah;
+use App\Models\WilayahGS;
 
 class HomeGSController extends Controller
 {
@@ -38,6 +38,7 @@ class HomeGSController extends Controller
         $aktivitasTerbaru = AktivitasMarketing::with([
                 'peluang.wilayah'
             ])
+            ->whereDate('tanggal', \Carbon\Carbon::today())
             ->latest()
             ->limit(5)
             ->get();
@@ -45,14 +46,14 @@ class HomeGSController extends Controller
         /* ===============================
          * PELUANG PROYEK PER WILAYAH
          * =============================== */
-        $peluangWilayah = Wilayah::withCount('peluangProyekGS')->get();
+        $peluangWilayah = WilayahGS::withCount('peluangProyekGS')->get();
 
         /* ===============================
          * CHART WILAYAH (FIX ERROR)
          * dipakai di blade → $chartWilayah
          * =============================== */
         $chartWilayah = $peluangWilayah->pluck(
-            'peluang_proyek_gs_count',
+            'peluang_proyek_g_s_count',
             'nama_wilayah'
         );
 

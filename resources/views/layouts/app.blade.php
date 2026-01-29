@@ -557,7 +557,7 @@
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <a href="{{ route('home') }}" class="sidebar-brand text-decoration-none">
+            <a href="{{ route('dashboard.ssgs') }}" class="sidebar-brand text-decoration-none">
                 <div class="logo-wrapper">
                     <img src="{{ asset('img/telkom-original.png') }}" alt="Telkom Indonesia"
                         style="width: 90px; height: auto;">
@@ -578,7 +578,7 @@
                     <span>Admin Dashboard</span>
                 </a>
             @else
-                <a href="{{ route('home') }}" class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}"
+                <a href="{{ route('dashboard.ssgs') }}" class="nav-link {{ request()->routeIs('dashboard.ssgs') ? 'active' : '' }}"
                     title="Dashboard">
                     <i class="bi bi-speedometer2"></i>
                     <span>Dashboard</span>
@@ -602,27 +602,8 @@
                 <span>Pembayaran</span>
             </a>
 
-            <a href="{{ route('wilayah.index') }}"
-                class="nav-link {{ request()->routeIs('wilayah.*') ? 'active' : '' }}" title="Data Wilayah">
-                <i class="bi bi-map"></i>
-                <span>Data Wilayah</span>
-            </a>
-        <div class="nav-section-title">GS Management</div>
-            <a href="{{ route('dashboard.gs') }}"
-                class="nav-link {{ request()->routeIs('dashboard.gs') ? 'active' : '' }}" title="Dashboard GS">
-                <i class="bi bi-speedometer2"></i>
-                <span>Dashboard GS</span>
-            </a>
-            <a href="{{ route('peluang-gs.index') }}"
-                class="nav-link {{ request()->routeIs('peluang-gs.*') ? 'active' : '' }}" title="Peluang Proyek GS">
-                <i class="bi bi-briefcase"></i>
-                <span>Peluang Proyek</span>
-            </a>
-             <a href="{{ route('aktivitas-marketing.index') }}"
-                class="nav-link {{ request()->routeIs('aktivitas-marketing.*') ? 'active' : '' }}" title="Aktivitas Marketing">
-                <i class="bi bi-activity"></i>
-                <span>Aktivitas Marketing</span>
-            </a>
+
+
         </nav>
 
         {{-- Bagian Khusus Admin --}}

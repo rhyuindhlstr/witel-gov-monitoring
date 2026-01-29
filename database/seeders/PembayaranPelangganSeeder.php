@@ -13,6 +13,11 @@ class PembayaranPelangganSeeder extends Seeder
     public function run(): void
     {
         $pelanggans = \App\Models\Pelanggan::all();
+
+        if ($pelanggans->isEmpty()) {
+            $this->command->info('Skipping Pembayaran seeding because Pelanggan data is empty.');
+            return;
+        }
         
         $totalPayments = 200;
         

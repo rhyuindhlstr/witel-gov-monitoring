@@ -14,7 +14,7 @@
 
     {{-- ACTION --}}
     <div class="mb-3 text-end">
-        <a href="{{ route('wilayah.create') }}" class="btn btn-primary">
+        <a href="{{ route('data-wilayah-gs.create') }}" class="btn btn-primary">
             + Tambah Wilayah
         </a>
     </div>
@@ -49,7 +49,7 @@
         {{-- DETAIL --}}
         <li>
             <a class="dropdown-item d-flex align-items-center gap-2"
-               href="{{ route('wilayah.show',$w->id) }}">
+               href="{{ route('data-wilayah-gs.show',$w->id) }}">
                 <i class="bi bi-eye"></i> Detail
             </a>
         </li>
@@ -57,7 +57,7 @@
         {{-- EDIT --}}
         <li>
             <a class="dropdown-item d-flex align-items-center gap-2"
-               href="{{ route('wilayah.edit',$w->id) }}">
+               href="{{ route('data-wilayah-gs.edit',$w->id) }}">
                 <i class="bi bi-pencil"></i> Edit
             </a>
         </li>
@@ -67,7 +67,7 @@
         {{-- HAPUS --}}
         <li>
             <form method="POST"
-                  action="{{ route('wilayah.destroy',$w->id) }}"
+                  action="{{ route('data-wilayah-gs.destroy',$w->id) }}"
                   class="form-delete-wilayah">
                 @csrf
                 @method('DELETE')

@@ -13,6 +13,11 @@ class PelangganSeeder extends Seeder
     public function run(): void
     {
         $wilayahs = \App\Models\Wilayah::all();
+
+        if ($wilayahs->isEmpty()) {
+            $this->command->info('Skipping Pelanggan seeding because Wilayah data is empty.');
+            return;
+        }
         
         $institutions = [
             // Lampung

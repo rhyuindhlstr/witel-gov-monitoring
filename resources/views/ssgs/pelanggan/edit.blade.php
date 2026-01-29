@@ -4,7 +4,7 @@
 @section('page-title', 'Edit Pelanggan')
 
 @section('breadcrumb')
-    <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('dashboard.ssgs') }}">Home</a></li>
     <li class="breadcrumb-item"><a href="{{ route('pelanggan.index') }}">Data Pelanggan</a></li>
     <li class="breadcrumb-item active">Edit</li>
 @endsection
@@ -50,7 +50,7 @@
                             <option value="">Pilih Wilayah</option>
                             @foreach($wilayahs as $wilayah)
                                 <option value="{{ $wilayah->id }}" {{ old('wilayah_id', $pelanggan->wilayah_id) == $wilayah->id ? 'selected' : '' }}>
-                                    {{ $wilayah->name }}
+                                    {{ $wilayah->nama_wilayah }}
                                 </option>
                             @endforeach
                         </select>

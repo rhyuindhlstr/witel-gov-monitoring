@@ -12,17 +12,43 @@ class WilayahSeeder extends Seeder
      */
     public function run(): void
     {
+        // Data kosong sesuai branch GS-Intan
         $wilayahs = [
-            ['nama_wilayah' => 'Bandar Lampung', 'keterangan' => 'Kota Bandar Lampung'],
-            ['nama_wilayah' => 'Lampung Selatan', 'keterangan' => 'Kabupaten Lampung Selatan'],
-            ['nama_wilayah' => 'Lampung Utara', 'keterangan' => 'Kabupaten Lampung Utara'],
-            ['nama_wilayah' => 'Lampung Tengah', 'keterangan' => 'Kabupaten Lampung Tengah'],
-            ['nama_wilayah' => 'Lampung Timur', 'keterangan' => 'Kabupaten Lampung Timur'],
-            ['nama_wilayah' => 'Pringsewu', 'keterangan' => 'Kabupaten Pringsewu'],
-            ['nama_wilayah' => 'Metro', 'keterangan' => 'Kota Metro'],
-            ['nama_wilayah' => 'Bengkulu', 'keterangan' => 'Kota Bengkulu'],
-            ['nama_wilayah' => 'Bengkulu Selatan', 'keterangan' => 'Kabupaten Bengkulu Selatan'],
-            ['nama_wilayah' => 'Bengkulu Utara', 'keterangan' => 'Kabupaten Bengkulu Utara'],
+            [
+                'code' => 'WITEL-LPG',
+                'nama_wilayah' => 'Witel Lampung',
+                'keterangan' => 'Wilayah Lampung'
+            ],
+            [
+                'code' => 'WITEL-BGL',
+                'nama_wilayah' => 'Witel Bengkulu',
+                'keterangan' => 'Wilayah Bengkulu'
+            ],
+           [
+                'code' => 'WITEL-METRO',
+                'nama_wilayah' => 'Witel Metro',
+                'keterangan' => 'Wilayah Metro'
+            ],
+            [
+                'code' => 'WITEL-KLI',
+                'nama_wilayah' => 'Witel Kalianda',
+                'keterangan' => 'Wilayah Kalianda'
+            ],
+            [
+                'code' => 'WITEL-KTB',
+                'nama_wilayah' => 'Witel Kotabumi',
+                'keterangan' => 'Wilayah Kotabumi'
+            ],
+             [
+                'code' => 'WITEL-LWA',
+                'nama_wilayah' => 'Witel Liwa',
+                'keterangan' => 'Wilayah Liwa'
+            ],
+             [
+                'code' => 'WITEL-PSW',
+                'nama_wilayah' => 'Witel Pringsewu',
+                'keterangan' => 'Wilayah Pringsewu'
+            ],
         ];
 
         foreach ($wilayahs as $wilayah) {

@@ -4,7 +4,7 @@
 @section('page-title', 'Data Pembayaran')
 
 @section('breadcrumb')
-    <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('dashboard.ssgs') }}">Home</a></li>
     <li class="breadcrumb-item active">Data Pembayaran</li>
 @endsection
 

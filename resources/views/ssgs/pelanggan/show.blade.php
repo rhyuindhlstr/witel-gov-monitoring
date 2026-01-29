@@ -4,7 +4,7 @@
 @section('page-title', 'Detail Pelanggan')
 
 @section('breadcrumb')
-    <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('dashboard.ssgs') }}">Home</a></li>
     <li class="breadcrumb-item"><a href="{{ route('pelanggan.index') }}">Data Pelanggan</a></li>
     <li class="breadcrumb-item active">Detail</li>
 @endsection
@@ -32,7 +32,7 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <label class="text-muted small">Wilayah</label>
-                        <p><span class="badge bg-secondary">{{ $pelanggan->wilayah->name ?? '-' }}</span></p>
+                        <p><span class="badge bg-secondary">{{ $pelanggan->wilayah->nama_wilayah ?? '-' }}</span></p>
                     </div>
                     <div class="col-12 mb-3">
                         <label class="text-muted small">Alamat</label>
@@ -92,7 +92,7 @@
                                     <tr>
                                         <td>{{ $kunj->tanggal_kunjungan->format('d M Y') }}</td>
                                         <td>{{ Str::limit($kunj->tujuan, 40) }}</td>
-                                        <td>{{ $kunj->user->name }}</td>
+                                        <td>: {{ $pelanggan->wilayah->nama_wilayah }}</td>
                                         <td>
                                             <a href="{{ route('kunjungan.show', $kunj->id) }}" class="btn btn-sm btn-outline-danger">
                                                 <i class="bi bi-eye"></i>

@@ -7,6 +7,9 @@ use App\Models\User;
 use App\Models\PembayaranPelanggan;
 use App\Models\Pelanggan;
 use App\Models\Wilayah;
+use App\Models\WilayahGS;
+use App\Models\PeluangProyekGS;
+use App\Models\AktivitasMarketing;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
@@ -60,6 +63,29 @@ class AdminDashboardController extends Controller
             ? (($newCustomers - $lastPeriodCustomers) / $lastPeriodCustomers) * 100
             : 100;
 
+        // --- 3. GS Performance Stats (New) ---
+        $gsWin = PeluangProyekGS::where('status_proyek', 'WIN')->count();
+        $gsProspect = PeluangProyekGS::where('status_proyek', 'PROSPECT')->count();
+        $gsKegiatanValid = PeluangProyekGS::where('status_proyek', 'KEGIATAN_VALID')->count();
+        $gsLose = PeluangProyekGS::where('status_proyek', 'LOSE')->count();
+        $gsCancel = PeluangProyekGS::where('status_proyek', 'CANCEL')->count();
+
+        // GS Charts Data
+        $gsPeluangWilayah = WilayahGS::withCount('peluangProyekGS')->get();
+        $gsChartWilayah = $gsPeluangWilayah->pluck('peluang_proyek_g_s_count', 'nama_wilayah');
+        
+        $gsChartNilai = [
+            'estimasi'  => PeluangProyekGS::sum('nilai_estimasi'),
+            'realisasi' => PeluangProyekGS::sum('nilai_realisasi'),
+        ];
+
+        // GS Aktivitas Marketing Terbaru
+        $gsAktivitasTerbaru = AktivitasMarketing::with(['peluang'])
+            ->whereDate('tanggal', Carbon::today())
+            ->latest('tanggal')
+            ->limit(5)
+            ->get();
+
         // Monthly Revenue Chart
         $driver = DB::connection()->getDriverName();
         $monthExpression = $driver === 'sqlite'
@@ -99,7 +125,15 @@ class AdminDashboardController extends Controller
             'revenueChartData',
             'recentPayments',
             'startDate',
-            'endDate'
+            'endDate',
+            'gsWin',
+            'gsProspect',
+            'gsKegiatanValid',
+            'gsLose',
+            'gsCancel',
+            'gsChartWilayah',
+            'gsChartNilai',
+            'gsAktivitasTerbaru'
         ));
     }
 }

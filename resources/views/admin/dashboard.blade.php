@@ -67,13 +67,17 @@
                     <div>
                         <div class="d-flex gap-2">
                             <div class="text-center">
-                                <h4 class="fw-bold mb-0">{{ $totalSSGS }}</h4>
-                                <small class="text-muted" style="font-size: 0.7em;">SSGS</small>
+                                <a href="{{ route('dashboard.ssgs') }}" class="text-decoration-none text-dark">
+                                    <h4 class="fw-bold mb-0">{{ $totalSSGS }}</h4>
+                                    <small class="text-muted" style="font-size: 0.7em;">SSGS</small>
+                                </a>
                             </div>
                             <div class="vr"></div>
                             <div class="text-center">
-                                <h4 class="fw-bold mb-0">{{ $totalGS }}</h4>
-                                <small class="text-muted" style="font-size: 0.7em;">GS</small>
+                                <a href="{{ route('dashboard.gs') }}" class="text-decoration-none text-dark">
+                                    <h4 class="fw-bold mb-0">{{ $totalGS }}</h4>
+                                    <small class="text-muted" style="font-size: 0.7em;">GS</small>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -170,6 +174,62 @@
                         Perlu tindak lanjut
                     </div>
                 </div>
+        </div>
+    </div>
+
+    {{-- GS PERFORMANCE (NEW) --}}
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold text-dark mb-0 text-uppercase small ls-1">GS Performance</h5>
+    </div>
+
+    <div class="row g-3 mb-4">
+        {{-- WIN --}}
+        <div class="col">
+            <div class="card shadow-sm border-0 h-100 bg-success text-white">
+                <div class="card-body text-center p-3">
+                    <div class="small fw-bold text-uppercase mb-1">WIN</div>
+                    <h3 class="fw-bold mb-0">{{ $gsWin }}</h3>
+                </div>
+            </div>
+        </div>
+
+        {{-- PROSPECT --}}
+        <div class="col">
+            <div class="card shadow-sm border-0 h-100 bg-primary text-white">
+                <div class="card-body text-center p-3">
+                    <div class="small fw-bold text-uppercase mb-1">PROSPECT</div>
+                    <h3 class="fw-bold mb-0">{{ $gsProspect }}</h3>
+                </div>
+            </div>
+        </div>
+
+        {{-- KEGIATAN VALID --}}
+        <div class="col">
+            <div class="card shadow-sm border-0 h-100 text-white" style="background-color: #6f42c1;">
+                <div class="card-body text-center p-3">
+                    <div class="small fw-bold text-uppercase mb-1">KEGIATAN_VALID</div>
+                    <h3 class="fw-bold mb-0">{{ $gsKegiatanValid }}</h3>
+                </div>
+            </div>
+        </div>
+
+        {{-- LOSE --}}
+        <div class="col">
+            <div class="card shadow-sm border-0 h-100 bg-danger text-white">
+                <div class="card-body text-center p-3">
+                    <div class="small fw-bold text-uppercase mb-1">LOSE</div>
+                    <h3 class="fw-bold mb-0">{{ $gsLose }}</h3>
+                </div>
+            </div>
+        </div>
+
+        {{-- CANCEL --}}
+        <div class="col">
+            <div class="card shadow-sm border-0 h-100 bg-dark text-white">
+                <div class="card-body text-center p-3">
+                    <div class="small fw-bold text-uppercase mb-1">CANCEL</div>
+                    <h3 class="fw-bold mb-0">{{ $gsCancel }}</h3>
+                </div>
             </div>
         </div>
     </div>
@@ -209,6 +269,88 @@
                         </span>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- GS CHARTS --}}
+    <div class="row mb-4">
+        <!-- Peluang Proyek per Wilayah -->
+        <div class="col-xl-6 col-lg-6">
+            <div class="card shadow-sm mb-4 h-100">
+                <div class="card-header py-3 bg-white border-bottom-0">
+                    <h6 class="m-0 font-weight-bold text-dark">Peluang Proyek per Wilayah</h6>
+                </div>
+                <div class="card-body">
+                    <div class="chart-bar" style="height: 300px;">
+                        <canvas id="gsWilayahChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Nilai Estimasi vs Realisasi -->
+        <div class="col-xl-6 col-lg-6">
+            <div class="card shadow-sm mb-4 h-100">
+                <div class="card-header py-3 bg-white border-bottom-0">
+                    <h6 class="m-0 font-weight-bold text-dark">Nilai Estimasi vs Realisasi</h6>
+                </div>
+                <div class="card-body">
+                    <div class="chart-bar" style="height: 300px;">
+                        <canvas id="gsNilaiChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- AGENDA AKTIVITAS MARKETING (GS) --}}
+    <div class="card shadow-sm mb-4">
+        <div class="card-header py-3 bg-light border-bottom-0">
+            <h6 class="m-0 font-weight-bold text-dark">Agenda Aktivitas Marketing</h6>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped mb-0">
+                    <thead style="background-color: #fddce0;"> {{-- Light red-ish background --}}
+                        <tr>
+                            <th>Tanggal</th>
+                            <th>Aktivitas</th>
+                            <th>Satker</th>
+                            <th>Nama GC</th>
+                            <th>Keterangan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($gsAktivitasTerbaru as $aktivitas)
+                            <tr>
+                                <td>{{ \Carbon\Carbon::parse($aktivitas->tanggal)->format('Y-m-d') }}</td>
+                                <td>
+                                    @php
+                                        $badgeColor = match(strtoupper($aktivitas->jenis_aktivitas)) {
+                                            'PRESENTASI', 'VISIT', 'CALL', 'MEETING' => 'info',
+                                            'NEGOSIASI', 'DEAL' => 'success',
+                                            'LOSE', 'CANCEL' => 'danger',
+                                            default => 'primary',
+                                        };
+                                    @endphp
+                                    <span class="badge bg-{{ $badgeColor }} text-uppercase">
+                                        {{ $aktivitas->jenis_aktivitas }}
+                                    </span>
+                                </td>
+                                <td>{{ $aktivitas->peluang->satker ?? '-' }}</td>
+                                <td>{{ $aktivitas->peluang->nama_gc ?? '-' }}</td>
+                                <td>{{ $aktivitas->keterangan }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" class="text-center py-4 text-muted">
+                                    Tidak ada agenda hari ini
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -358,6 +500,95 @@
                     },
                     cutout: '75%',
                 },
+            });
+
+            // --- GS CHARTS ---
+            
+            // 1. Wilayah Chart (Horizontal Bar)
+            const ctxWilayah = document.getElementById('gsWilayahChart').getContext('2d');
+            new Chart(ctxWilayah, {
+                type: 'bar',
+                data: {
+                    labels: {!! json_encode($gsChartWilayah->keys()) !!},
+                    datasets: [{
+                        label: 'Jumlah Proyek',
+                        data: {!! json_encode($gsChartWilayah->values()) !!},
+                        backgroundColor: '#e30613', // CHANGED TO RED
+                        hoverBackgroundColor: '#b90510', // CHANGED TO DARK RED
+                        borderColor: '#e30613', // CHANGED TO RED
+                        borderRadius: 5,
+                        barThickness: 20
+                    }]
+                },
+                options: {
+                    indexAxis: 'y', // Horizontal bar
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            grid: { display: false }
+                        },
+                        y: {
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+
+            // 2. Nilai Chart (Line/Bar Comparison)
+            const ctxNilai = document.getElementById('gsNilaiChart').getContext('2d');
+            new Chart(ctxNilai, {
+                type: 'line',
+                data: {
+                    labels: ['Estimasi', 'Realisasi'],
+                    datasets: [{
+                        label: 'Total Nilai (Rp)',
+                        data: [{{ $gsChartNilai['estimasi'] }}, {{ $gsChartNilai['realisasi'] }}],
+                        borderColor: '#36b9cc',
+                        backgroundColor: 'rgba(54, 185, 204, 0.1)',
+                        pointBackgroundColor: '#36b9cc',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: '#36b9cc',
+                        fill: true,
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                             callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(context.parsed.y);
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    if (value >= 1000000000) return 'Rp ' + (value / 1000000000).toFixed(1) + 'M';
+                                    if (value >= 1000000) return 'Rp ' + (value / 1000000).toFixed(0) + 'jt';
+                                    return value;
+                                }
+                            }
+                        }
+                    }
+                }
             });
         });
     </script>

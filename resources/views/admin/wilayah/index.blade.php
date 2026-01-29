@@ -1,4 +1,4 @@
-@extends(Auth::user()->role === 'admin' ? 'layouts.admin' : 'layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Data Wilayah')
 @section('page-title', 'Data Wilayah')
@@ -31,14 +31,8 @@
                         @forelse($wilayahs as $index => $wilayah)
                             <tr>
                                 <td>{{ $index + 1 }}</td>
-                                <td>{{ $wilayah->name }}</td>
-                                <td>
-                                    @if($wilayah->code)
-                                        <span class="badge bg-secondary">{{ $wilayah->code }}</span>
-                                    @else
-                                        -
-                                    @endif
-                                </td>
+                                <td>{{ $wilayah->nama_wilayah }}</td>
+                                <td>{{ $wilayah->code }}</td>
                                 <td class="text-center">
                                     <div class="btn-group" role="group">
                                         <a href="{{ route('wilayah.edit', $wilayah) }}" class="btn btn-sm btn-warning">

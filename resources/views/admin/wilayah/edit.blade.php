@@ -1,4 +1,4 @@
-@extends(Auth::user()->role === 'admin' ? 'layouts.admin' : 'layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Edit Wilayah')
 @section('page-title', 'Edit Wilayah')
@@ -20,11 +20,12 @@
                     <form action="{{ route('wilayah.update', $wilayah) }}" method="POST">
                         @csrf
                         @method('PUT')
+
+
                         <div class="mb-3">
-                            <label for="name" class="form-label">Nama Wilayah <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control @error('name') is-invalid @enderror" id="name"
-                                name="name" value="{{ old('name', $wilayah->name) }}" required>
-                            @error('name')
+                            <label for="nama_wilayah" class="form-label">Nama Wilayah</label>
+            <input type="text" class="form-control" id="nama_wilayah" name="nama_wilayah" value="{{ $wilayah->nama_wilayah }}" required>
+                            @error('nama_wilayah')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
