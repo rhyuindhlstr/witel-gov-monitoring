@@ -25,6 +25,14 @@
             --transition-speed: 0.3s;
         }
 
+        /* Fix for select option text visibility */
+        select,
+        .form-select,
+        select option {
+            color: #000 !important;
+            background-color: #fff !important;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--telkom-grey);
@@ -407,8 +415,7 @@
                 </a>
 
                 @if(auth()->user()->role === 'admin')
-                    <a href="{{ route('admin.wilayah.index') }}"
-                        class="{{ request()->routeIs('admin.wilayah.*') ? 'active' : '' }}">
+                    <a href="{{ route('wilayah.index') }}" class="{{ request()->routeIs('wilayah.*') ? 'active' : '' }}">
                         <i class="fas fa-map-marked-alt"></i>
                         <span>Data Wilayah</span>
                     </a>

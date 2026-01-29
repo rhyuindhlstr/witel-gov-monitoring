@@ -2,24 +2,26 @@
 
 namespace App\Http\Controllers;
 
-<<<<<<< HEAD
 use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
-=======
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rule;
->>>>>>> 9bbe46c7fe869ced2b14e1be7895e5f4f60d0475
 
 class ProfileController extends Controller
 {
     /**
-<<<<<<< HEAD
+     * Show the user profile.
+     */
+    public function show(): View
+    {
+        return view('profile.show', [
+            'user' => Auth::user()
+        ]);
+    }
+
+    /**
      * Display the user's profile form.
      */
     public function edit(Request $request): View
@@ -64,26 +66,5 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
-=======
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
-    /**
-     * Show the user profile.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function show()
-    {
-        return view('profile.show', [
-            'user' => Auth::user()
-        ]);
->>>>>>> 9bbe46c7fe869ced2b14e1be7895e5f4f60d0475
     }
 }

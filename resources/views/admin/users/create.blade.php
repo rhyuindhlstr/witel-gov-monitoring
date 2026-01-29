@@ -43,8 +43,8 @@
                                 <select class="form-select @error('role') is-invalid @enderror" id="role" name="role" required>
                                     <option value="" disabled selected>Pilih Role</option>
                                     <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
-                                    <option value="marketing ssgs" {{ old('role') == 'marketing ssgs' ? 'selected' : '' }}>Marketing SSGS</option>
-                                    <option value="marketing gs" {{ old('role') == 'marketing gs' ? 'selected' : '' }}>Marketing GS</option>
+                                    <option value="ssgs" {{ old('role') == 'ssgs' ? 'selected' : '' }}>SSGS (Marketing)</option>
+                                    <option value="gs" {{ old('role') == 'gs' ? 'selected' : '' }}>GS (Marketing)</option>
                                 </select>
                                 @error('role')
                                     <div class="invalid-feedback">{{ $message }}</div>

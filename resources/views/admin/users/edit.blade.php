@@ -22,8 +22,8 @@
                         @method('PUT')
                         <div class="mb-3">
                             <label for="name" class="form-label">Nama Lengkap <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name"
-                                value="{{ old('name', $user->name) }}" required>
+                            <input type="text" class="form-control @error('name') is-invalid @enderror" id="name"
+                                name="name" value="{{ old('name', $user->name) }}" required>
                             @error('name')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -41,10 +41,14 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="role" class="form-label">Role <span class="text-danger">*</span></label>
-                                <select class="form-select @error('role') is-invalid @enderror" id="role" name="role" required>
-                                    <option value="admin" {{ old('role', $user->role) == 'admin' ? 'selected' : '' }}>Admin</option>
-                                    <option value="marketing ssgs" {{ old('role', $user->role) == 'marketing ssgs' ? 'selected' : '' }}>Marketing SSGS</option>
-                                    <option value="marketing gs" {{ old('role', $user->role) == 'marketing gs' ? 'selected' : '' }}>Marketing GS</option>
+                                <select class="form-select @error('role') is-invalid @enderror" id="role" name="role"
+                                    required>
+                                    <option value="admin" {{ old('role', $user->role) == 'admin' ? 'selected' : '' }}>Admin
+                                    </option>
+                                    <option value="ssgs" {{ old('role', $user->role) == 'ssgs' ? 'selected' : '' }}>SSGS
+                                        (Marketing)</option>
+                                    <option value="gs" {{ old('role', $user->role) == 'gs' ? 'selected' : '' }}>GS (Marketing)
+                                    </option>
                                 </select>
                                 @error('role')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -67,8 +71,8 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="password" class="form-label">Password Baru (Opsional)</label>
-                                <input type="password" class="form-control @error('password') is-invalid @enderror" id="password"
-                                    name="password">
+                                <input type="password" class="form-control @error('password') is-invalid @enderror"
+                                    id="password" name="password">
                                 @error('password')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror

@@ -12,15 +12,7 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create Admin user
-        \App\Models\User::create([
-            'name' => 'Admin System',
-            'email' => 'admin@telkom.com',
-            'password' => bcrypt('password'),
-            'email_verified_at' => now(),
-        ]);
-
-        // Create Marketing SSGS users
+        // Marketing SSGS users
         $marketingUsers = [
             ['name' => 'Andi Setiawan', 'email' => 'andi.setiawan@telkom.com'],
             ['name' => 'Siti Rahma', 'email' => 'siti.rahma@telkom.com'],
@@ -28,13 +20,27 @@ class UserSeeder extends Seeder
         ];
 
         foreach ($marketingUsers as $user) {
-            \App\Models\User::create([
-                'name' => $user['name'],
-                'email' => $user['email'],
+            \App\Models\User::firstOrCreate(
+                ['email' => $user['email']],
+                [
+                    'name' => $user['name'],
+                    'password' => bcrypt('password'),
+                    'email_verified_at' => now(),
+                    'role' => 'ssgs',
+                ]
+            );
+        }
+
+        // Create GS User
+        \App\Models\User::firstOrCreate(
+            ['email' => 'eko.prasetyo@telkom.com'],
+            [
+                'name' => 'Eko Prasetyo',
                 'password' => bcrypt('password'),
                 'email_verified_at' => now(),
-            ]);
-        }
+                'role' => 'gs',
+            ]
+        );
 
         $this->command->info('Created ' . (count($marketingUsers) + 1) . ' user records');
     }

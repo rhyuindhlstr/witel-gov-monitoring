@@ -1,11 +1,11 @@
-@extends('layouts.admin')
+@extends(Auth::user()->role === 'admin' ? 'layouts.admin' : 'layouts.app')
 
 @section('title', 'Edit Wilayah')
 @section('page-title', 'Edit Wilayah')
 
 @section('breadcrumb')
     <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-    <li class="breadcrumb-item"><a href="{{ route('admin.wilayah.index') }}">Data Wilayah</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('wilayah.index') }}">Data Wilayah</a></li>
     <li class="breadcrumb-item active">Edit</li>
 @endsection
 
@@ -17,7 +17,7 @@
                     <h5 class="mb-0 fw-bold text-center">Form Edit Wilayah</h5>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('admin.wilayah.update', $wilayah) }}" method="POST">
+                    <form action="{{ route('wilayah.update', $wilayah) }}" method="POST">
                         @csrf
                         @method('PUT')
                         <div class="mb-3">
@@ -39,7 +39,7 @@
                         </div>
 
                         <div class="d-flex justify-content-end gap-2">
-                            <a href="{{ route('admin.wilayah.index') }}" class="btn btn-secondary">Batal</a>
+                            <a href="{{ route('wilayah.index') }}" class="btn btn-secondary">Batal</a>
                             <button type="submit" class="btn btn-telkom">Update</button>
                         </div>
                     </form>

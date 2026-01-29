@@ -21,9 +21,9 @@ require __DIR__ . '/auth.php';
 // Dashboard and Attributes - accessible by authenticated users
 Route::middleware(['auth'])->group(function () {
     // Admin Dashboard
-    Route::get('/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [\App\Http\Controllers\AdminDashboardController::class, 'index'])
+        ->middleware(\App\Http\Middleware\AdminMiddleware::class)
+        ->name('dashboard');
 
     // SSGS Dashboard
     Route::get('/home', [HomeController::class, 'index'])->name('home');
@@ -39,6 +39,9 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('kunjungan', KunjunganPelangganController::class);
     Route::resource('pembayaran', PembayaranPelangganController::class);
 
+    // Data Wilayah (Accessible by all roles)
+    Route::resource('wilayah', WilayahController::class);
+
     // Notifications
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
     Route::post('/notifications/mark-read', [NotificationController::class, 'markAsRead'])->name('notifications.markRead');
@@ -46,6 +49,5 @@ Route::middleware(['auth'])->group(function () {
 
 // Admin-only routes (Wilayah & User Management)
 Route::middleware(['auth', \App\Http\Middleware\AdminMiddleware::class])->prefix('admin')->name('admin.')->group(function () {
-    Route::resource('wilayah', WilayahController::class);
     Route::resource('users', UserController::class);
 });

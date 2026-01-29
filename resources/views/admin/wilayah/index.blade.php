@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends(Auth::user()->role === 'admin' ? 'layouts.admin' : 'layouts.app')
 
 @section('title', 'Data Wilayah')
 @section('page-title', 'Data Wilayah')
@@ -12,7 +12,7 @@
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
             <span>Daftar Wilayah</span>
-            <a href="{{ route('admin.wilayah.create') }}" class="btn btn-sm btn-telkom">
+            <a href="{{ route('wilayah.create') }}" class="btn btn-sm btn-telkom">
                 <i class="fas fa-plus me-1"></i> Tambah Wilayah
             </a>
         </div>
@@ -41,10 +41,10 @@
                                 </td>
                                 <td class="text-center">
                                     <div class="btn-group" role="group">
-                                        <a href="{{ route('admin.wilayah.edit', $wilayah) }}" class="btn btn-sm btn-warning">
+                                        <a href="{{ route('wilayah.edit', $wilayah) }}" class="btn btn-sm btn-warning">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <form action="{{ route('admin.wilayah.destroy', $wilayah) }}" method="POST"
+                                        <form action="{{ route('wilayah.destroy', $wilayah) }}" method="POST"
                                             onsubmit="return confirm('Apakah Anda yakin ingin menghapus wilayah ini?');"
                                             class="d-inline">
                                             @csrf

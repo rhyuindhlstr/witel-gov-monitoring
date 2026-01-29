@@ -36,7 +36,7 @@ class WilayahController extends Controller
 
         Wilayah::create($validated);
 
-        return redirect()->route('admin.wilayah.index')
+        return redirect()->route('wilayah.index')
             ->with('success', 'Wilayah successfully created.');
     }
 
@@ -68,7 +68,7 @@ class WilayahController extends Controller
 
         $wilayah->update($validated);
 
-        return redirect()->route('admin.wilayah.index')
+        return redirect()->route('wilayah.index')
             ->with('success', 'Wilayah successfully updated.');
     }
 
@@ -79,7 +79,7 @@ class WilayahController extends Controller
     {
         $wilayah->delete();
 
-        return redirect()->route('admin.wilayah.index')
+        return redirect()->route('wilayah.index')
             ->with('success', 'Wilayah successfully deleted.');
     }
 }

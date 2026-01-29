@@ -51,10 +51,10 @@
                                 <td>
                                     @if($user->role === 'admin')
                                         <span class="badge bg-danger">Admin</span>
-                                    @elseif($user->role === 'marketing ssgs')
-                                        <span class="badge bg-info">Marketing SSGS</span>
-                                    @elseif($user->role === 'marketing gs')
-                                        <span class="badge bg-success">Marketing GS</span>
+                                    @elseif($user->role === 'ssgs')
+                                        <span class="badge bg-info">SSGS (Marketing)</span>
+                                    @elseif($user->role === 'gs')
+                                        <span class="badge bg-success">GS (Marketing)</span>
                                     @else
                                         <span class="badge bg-secondary">{{ ucfirst($user->role) }}</span>
                                     @endif
