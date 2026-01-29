@@ -52,7 +52,7 @@
                                 @foreach($wilayahs as $wilayah)
                                     <option value="{{ $wilayah->id }}" {{ old('wilayah_id') == $wilayah->id ? 'selected' : '' }}
                                         style="color: #000; background-color: #fff;">
-                                        {{ $wilayah->nama_wilayah }}
+                                        {{ $wilayah->name }}
                                     </option>
                                 @endforeach
                             </select>

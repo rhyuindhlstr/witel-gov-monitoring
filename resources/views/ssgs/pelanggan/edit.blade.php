@@ -50,7 +50,7 @@
                             <option value="">Pilih Wilayah</option>
                             @foreach($wilayahs as $wilayah)
                                 <option value="{{ $wilayah->id }}" {{ old('wilayah_id', $pelanggan->wilayah_id) == $wilayah->id ? 'selected' : '' }}>
-                                    {{ $wilayah->nama_wilayah }}
+                                    {{ $wilayah->name }}
                                 </option>
                             @endforeach
                         </select>

@@ -32,7 +32,7 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <label class="text-muted small">Wilayah</label>
-                        <p><span class="badge bg-secondary">{{ $pelanggan->wilayah->nama_wilayah ?? '-' }}</span></p>
+                        <p><span class="badge bg-secondary">{{ $pelanggan->wilayah->name ?? '-' }}</span></p>
                     </div>
                     <div class="col-12 mb-3">
                         <label class="text-muted small">Alamat</label>

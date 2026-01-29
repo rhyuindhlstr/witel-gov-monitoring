@@ -32,7 +32,7 @@
                                 <option value="">Semua Wilayah</option>
                                 @foreach($wilayahs as $wilayah)
                                     <option value="{{ $wilayah->id }}" {{ request('wilayah_id') == $wilayah->id ? 'selected' : '' }}>
-                                        {{ $wilayah->nama_wilayah }}
+                                        {{ $wilayah->name }}
                                     </option>
                                 @endforeach
                             </select>
@@ -83,7 +83,7 @@
                                     <td>{{ $pelanggan->nama_pic }}</td>
                                     <td>
                                         @if($pelanggan->wilayah)
-                                            <span class="badge bg-secondary">{{ $pelanggan->wilayah->nama_wilayah }}</span>
+                                            <span class="badge bg-secondary">{{ $pelanggan->wilayah->name }}</span>
                                         @else
                                             <span class="text-muted">-</span>
                                         @endif
