@@ -1,0 +1,20 @@
+/* WELCOME CARD */
+.welcome-card {
+    background: linear-gradient(90deg, #fff5f5, #ffffff);
+    border-left: 6px solid #e60000;
+}
+
+/* WARNA TENDER (GANTI UNGU) */
+.bg-orange {
+    background-color: #fd7e14 !important;
+}
+
+/* SIDEBAR FOOTER */
+.sidebar-footer {
+    position: absolute;
+    bottom: 10px;
+    width: 100%;
+    font-size: 12px;
+    color: #bbb;
+    text-align: center;
+}

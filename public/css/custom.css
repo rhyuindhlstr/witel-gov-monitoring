@@ -1,0 +1,122 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: #f4f6f9;
+}
+
+/* NAVBAR */
+.top-navbar {
+    height: 56px;
+    background: linear-gradient(90deg,#b40000,#ff2b2b);
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 24px;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+}
+
+/* LAYOUT */
+.main-layout {
+    display: flex;
+    margin-top: 56px;
+}
+
+/* SIDEBAR */
+.sidebar {
+    width: 240px;
+    background: linear-gradient(180deg,#9b0000,#d40000);
+    color: white;
+    min-height: calc(100vh - 56px);
+    padding: 20px;
+}
+
+.sidebar-logo {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.sidebar-logo img {
+    width: 60px;
+}
+
+.sidebar-menu a {
+    display: block;
+    color: white;
+    padding: 10px 14px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    text-decoration: none;
+}
+
+.sidebar-menu a.active,
+.sidebar-menu a:hover {
+    background: white;
+    color: #b40000;
+}
+
+/* CONTENT */
+.content {
+    flex: 1;
+    padding: 24px;
+}
+
+/* WELCOME */
+.welcome-card {
+    background: linear-gradient(90deg,#b40000,#ff3b3b);
+    color: white;
+    padding: 24px;
+    border-radius: 16px;
+    margin-bottom: 24px;
+}
+
+/* STATUS */
+.status-row {
+    display: grid;
+    grid-template-columns: repeat(6,1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.status-card {
+    padding: 16px;
+    border-radius: 14px;
+    color: white;
+    text-align: center;
+}
+
+.status-card.primary { background:#0d6efd }
+.status-card.warning { background:#ffc107 }
+.status-card.secondary { background:#6c757d }
+.status-card.info { background:#0dcaf0 }
+.status-card.success { background:#198754 }
+.status-card.dark { background:#212529 }
+
+/* BOTTOM */
+.bottom-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 24px;
+}
+
+.card {
+    background: white;
+    padding: 16px;
+    border-radius: 14px;
+}
+
+/* MAP */
+.map-wrapper img {
+    width: 100%;
+}
+
+.map-legend div {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #eee;
+    padding: 6px 0;
+}
+
+
