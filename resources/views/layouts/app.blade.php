@@ -607,6 +607,22 @@
                 <i class="bi bi-map"></i>
                 <span>Data Wilayah</span>
             </a>
+        <div class="nav-section-title">GS Management</div>
+            <a href="{{ route('dashboard.gs') }}"
+                class="nav-link {{ request()->routeIs('dashboard.gs') ? 'active' : '' }}" title="Dashboard GS">
+                <i class="bi bi-speedometer2"></i>
+                <span>Dashboard GS</span>
+            </a>
+            <a href="{{ route('peluang-gs.index') }}"
+                class="nav-link {{ request()->routeIs('peluang-gs.*') ? 'active' : '' }}" title="Peluang Proyek GS">
+                <i class="bi bi-briefcase"></i>
+                <span>Peluang Proyek</span>
+            </a>
+             <a href="{{ route('aktivitas-marketing.index') }}"
+                class="nav-link {{ request()->routeIs('aktivitas-marketing.*') ? 'active' : '' }}" title="Aktivitas Marketing">
+                <i class="bi bi-activity"></i>
+                <span>Aktivitas Marketing</span>
+            </a>
         </nav>
 
         {{-- Bagian Khusus Admin --}}

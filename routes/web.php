@@ -9,11 +9,15 @@ use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\KunjunganPelangganController;
 use App\Http\Controllers\PembayaranPelangganController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\HomeGSController;
+use App\Http\Controllers\PeluangProyekGSController;
+use App\Http\Controllers\AktivitasMarketingController;
 
 // Redirect root to login
 Route::get('/', function () {
     return redirect()->route('login');
 });
+
 
 // Auth Routes
 require __DIR__ . '/auth.php';
@@ -45,6 +49,13 @@ Route::middleware(['auth'])->group(function () {
     // Notifications
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
     Route::post('/notifications/mark-read', [NotificationController::class, 'markAsRead'])->name('notifications.markRead');
+
+    // GS Module Routes
+    Route::get('/dashboard-gs', [HomeGSController::class, 'index'])->name('dashboard.gs');
+    Route::resource('peluang-gs', PeluangProyekGSController::class);
+    Route::get('peluang-gs/export', [PeluangProyekGSController::class, 'export'])->name('peluang-gs.export');
+    Route::get('peluang-gs/{peluang_g}/pdf', [PeluangProyekGSController::class, 'exportPdf'])->name('peluang-gs.pdf');
+    Route::resource('aktivitas-marketing', AktivitasMarketingController::class);
 });
 
 // Admin-only routes (Wilayah & User Management)

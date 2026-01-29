@@ -1,0 +1,32 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration {
+    public function up(): void
+    {
+        Schema::create('peluang_proyek_gs_logs', function (Blueprint $table) {
+            $table->id();
+
+            $table->foreignId('peluang_proyek_gs_id')
+                  ->constrained('peluang_proyek_gs')
+                  ->cascadeOnDelete();
+
+            $table->foreignId('user_id')->nullable();
+
+            $table->string('aksi'); // CREATE | UPDATE | DELETE
+
+            $table->json('data_lama')->nullable();
+            $table->json('data_baru')->nullable();
+
+            $table->timestamps();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('peluang_proyek_gs_logs');
+    }
+};

@@ -13,5 +13,10 @@ class Wilayah extends Model
         'name',
         'code',
     ];
-    //
+
+    // relasi ke peluang (opsional, tapi penting buat dashboard)
+    public function peluangProyekGS()
+    {
+        return $this->hasMany(PeluangProyekGS::class);
+    }
 }
