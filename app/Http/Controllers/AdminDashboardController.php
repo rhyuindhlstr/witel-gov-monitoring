@@ -133,6 +133,8 @@ class AdminDashboardController extends Controller
             'gsCancel',
             'gsChartWilayah',
             'gsChartNilai',
+            'gsChartWilayah',
+            'gsChartNilai',
             'gsAktivitasTerbaru'
         ));
     }

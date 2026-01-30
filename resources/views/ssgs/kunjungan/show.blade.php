@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
-@section('title', 'Detail Kunjungan')
-@section('page-title', 'Detail Kunjungan')
+@section('title', 'Detail Interaksi')
+@section('page-title', 'Detail Interaksi')
 
 @section('breadcrumb')
     <li class="breadcrumb-item"><a href="{{ route('dashboard.ssgs') }}">Home</a></li>
-    <li class="breadcrumb-item"><a href="{{ route('kunjungan.index') }}">Data Kunjungan</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('kunjungan.index') }}">Data Interaksi</a></li>
     <li class="breadcrumb-item active">Detail</li>
 @endsection
 
@@ -16,7 +16,7 @@
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="mb-0">
                     <i class="bi bi-calendar-check text-danger me-2"></i>
-                    Detail Kunjungan
+                    Detail Interaksi
                 </h5>
                 <div class="btn-group">
                     <a href="{{ route('kunjungan.edit', $kunjungan->id) }}" class="btn btn-sm btn-warning">
@@ -27,8 +27,17 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label class="text-muted small">Tanggal Kunjungan</label>
+                        <label class="text-muted small">Tanggal Interaksi</label>
                         <p class="fw-semibold">{{ $kunjungan->tanggal_kunjungan->format('d F Y') }}</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="text-muted small">Metode Interaksi</label>
+                        <p class="fw-semibold">
+                            <span class="badge bg-{{ $kunjungan->metode_badge }}">
+                                <i class="bi {{ $kunjungan->metode_icon }} me-1"></i>
+                                {{ ucfirst($kunjungan->metode) }}
+                            </span>
+                        </p>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label class="text-muted small">Petugas</label>
@@ -45,11 +54,11 @@
                         </p>
                     </div>
                     <div class="col-12 mb-3">
-                        <label class="text-muted small">Tujuan Kunjungan</label>
+                        <label class="text-muted small">Tujuan Interaksi</label>
                         <p class="fw-semibold">{{ $kunjungan->tujuan }}</p>
                     </div>
                     <div class="col-12 mb-3">
-                        <label class="text-muted small">Hasil Kunjungan</label>
+                        <label class="text-muted small">Hasil Interaksi</label>
                         <div class="border rounded p-3 bg-light">
                             <p class="mb-0">{{ $kunjungan->hasil_kunjungan }}</p>
                         </div>

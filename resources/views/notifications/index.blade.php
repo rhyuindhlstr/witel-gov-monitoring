@@ -24,17 +24,17 @@
             
             <div class="list-group list-group-flush">
                 @forelse($notifications as $notification)
-                    <a href="{{ $notification['action_url'] }}" class="list-group-item list-group-item-action px-4 py-3 {{ !$notification['read'] ? 'bg-light' : '' }}">
+                    <a href="{{ $notification->data['action_url'] ?? '#' }}" class="list-group-item list-group-item-action px-4 py-3 {{ !$notification->read_at ? 'bg-light' : '' }}">
                         <div class="d-flex align-items-start">
-                            <div class="bg-{{ $notification['type'] }} bg-opacity-10 text-{{ $notification['type'] }} rounded-circle p-2 me-3 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; min-width: 40px;">
-                                <i class="bi {{ $notification['icon'] }} fs-5"></i>
+                            <div class="bg-{{ $notification->data['type'] ?? 'primary' }} bg-opacity-10 text-{{ $notification->data['type'] ?? 'primary' }} rounded-circle p-2 me-3 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; min-width: 40px;">
+                                <i class="{{ $notification->data['icon'] ?? 'bi-bell' }} fs-5"></i>
                             </div>
                             <div class="flex-grow-1">
                                 <div class="d-flex w-100 justify-content-between align-items-center mb-1">
-                                    <h6 class="mb-0 text-dark fw-bold">{{ $notification['title'] }}</h6>
-                                    <small class="text-muted">{{ $notification['time'] }}</small>
+                                    <h6 class="mb-0 text-dark fw-bold">{{ $notification->data['title'] ?? 'Notification' }}</h6>
+                                    <small class="text-muted">{{ $notification->created_at->diffForHumans() }}</small>
                                 </div>
-                                <p class="mb-0 text-secondary">{{ $notification['message'] }}</p>
+                                <p class="mb-0 text-secondary">{{ $notification->data['message'] ?? '' }}</p>
                             </div>
                         </div>
                     </a>

@@ -31,6 +31,11 @@ class KunjunganPelangganController extends Controller
         if ($request->filled('user_id')) {
             $query->byUser($request->user_id);
         }
+
+        // Filter by method
+        if ($request->filled('metode')) {
+            $query->where('metode', $request->metode);
+        }
         
         $kunjungans = $query->latest('tanggal_kunjungan')->paginate(20);
         $pelanggans = Pelanggan::all();
@@ -62,10 +67,25 @@ class KunjunganPelangganController extends Controller
     {
         $validated = $request->validate([
             'pelanggan_id' => 'required|exists:pelanggans,id',
+            'metode' => 'required|in:visit,call,whatsapp',
             'tanggal_kunjungan' => 'required|date',
             'tujuan' => 'required|string',
-            'hasil_kunjungan' => 'required|string'
+            // 'hasil_kunjungan' validation removed here, handled manually below
         ]);
+        
+        // Determine hasil based on method
+        $hasil = match($request->metode) {
+            'visit' => $request->hasil_visit,
+            'call' => $request->hasil_call,
+            'whatsapp' => $request->hasil_whatsapp,
+            default => null
+        };
+
+        if(!$hasil){
+            return back()->withErrors(['hasil_kunjungan' => 'Hasil interaksi wajib diisi'])->withInput();
+        }
+
+        $validated['hasil_kunjungan'] = $hasil;
         
         // Auto-assign current user
         $validated['user_id'] = auth()->id();
@@ -73,7 +93,7 @@ class KunjunganPelangganController extends Controller
         KunjunganPelanggan::create($validated);
         
         return redirect()->route('kunjungan.index')
-                        ->with('success', 'Data kunjungan berhasil ditambahkan');
+                        ->with('success', 'Data interaksi berhasil ditambahkan');
     }
 
     /**
@@ -107,15 +127,29 @@ class KunjunganPelangganController extends Controller
         
         $validated = $request->validate([
             'pelanggan_id' => 'required|exists:pelanggans,id',
+            'metode' => 'required|in:visit,call,whatsapp',
             'tanggal_kunjungan' => 'required|date',
             'tujuan' => 'required|string',
-            'hasil_kunjungan' => 'required|string'
         ]);
+
+        // Determine hasil based on method
+        $hasil = match($request->metode) {
+            'visit' => $request->hasil_visit,
+            'call' => $request->hasil_call,
+            'whatsapp' => $request->hasil_whatsapp,
+            default => null
+        };
+
+        if(!$hasil){
+            return back()->withErrors(['hasil_kunjungan' => 'Hasil interaksi wajib diisi'])->withInput();
+        }
+
+        $validated['hasil_kunjungan'] = $hasil;
         
         $kunjungan->update($validated);
         
         return redirect()->route('kunjungan.index')
-                        ->with('success', 'Data kunjungan berhasil diperbarui');
+                        ->with('success', 'Data interaksi berhasil diperbarui');
     }
 
     /**
@@ -127,6 +161,6 @@ class KunjunganPelangganController extends Controller
         $kunjungan->delete();
         
         return redirect()->route('kunjungan.index')
-                        ->with('success', 'Data kunjungan berhasil dihapus');
+                        ->with('success', 'Data interaksi berhasil dihapus');
     }
 }

@@ -91,6 +91,7 @@ class HomeController extends Controller
             'totalRevenue',
             'chartData',
             'recentPayments',
+            'recentPayments',
             'startDate',
             'endDate'
         ));

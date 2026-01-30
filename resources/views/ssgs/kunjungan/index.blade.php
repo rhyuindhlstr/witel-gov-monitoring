@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
-@section('title', 'Data Kunjungan')
-@section('page-title', 'Data Kunjungan')
+@section('title', 'Data Interaksi')
+@section('page-title', 'Data Interaksi')
 
 @section('breadcrumb')
     <li class="breadcrumb-item"><a href="{{ route('dashboard.ssgs') }}">Home</a></li>
-    <li class="breadcrumb-item active">Data Kunjungan</li>
+    <li class="breadcrumb-item active">Data Interaksi</li>
 @endsection
 
 @section('content')
@@ -16,10 +16,10 @@
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h5 class="card-title mb-0">
                         <i class="bi bi-calendar-check text-danger me-2"></i>
-                        Daftar Kunjungan
+                        Daftar Interaksi
                     </h5>
                     <a href="{{ route('kunjungan.create') }}" class="btn btn-telkom">
-                        <i class="bi bi-plus-circle me-2"></i>Tambah Kunjungan
+                        <i class="bi bi-plus-circle me-2"></i>Tambah Interaksi
                     </a>
                 </div>
                 
@@ -44,6 +44,15 @@
                         <div class="col-md-3">
                             <label class="form-label">Tanggal Akhir</label>
                             <input type="date" name="end_date" class="form-control" value="{{ request('end_date') }}">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Metode</label>
+                            <select name="metode" class="form-select">
+                                <option value="">Semua Metode</option>
+                                <option value="visit" {{ request('metode') == 'visit' ? 'selected' : '' }}>Visit</option>
+                                <option value="call" {{ request('metode') == 'call' ? 'selected' : '' }}>Call</option>
+                                <option value="whatsapp" {{ request('metode') == 'whatsapp' ? 'selected' : '' }}>WhatsApp</option>
+                            </select>
                         </div>
                         <div class="col-md-3">
                             <label class="form-label">Petugas</label>
@@ -74,6 +83,7 @@
                             <tr>
                                 <th>NO</th>
                                 <th>TANGGAL</th>
+                                <th>METODE</th>
                                 <th>PELANGGAN</th>
                                 <th>TUJUAN</th>
                                 <th>PETUGAS</th>
@@ -85,6 +95,12 @@
                                 <tr>
                                     <td>{{ $kunjungans->firstItem() + $index }}</td>
                                     <td>{{ $kunjungan->tanggal_kunjungan->format('d M Y') }}</td>
+                                    <td class="text-center">
+                                        <span class="badge bg-{{ $kunjungan->metode_badge }}">
+                                            <i class="bi {{ $kunjungan->metode_icon }} me-1"></i>
+                                            {{ ucfirst($kunjungan->metode) }}
+                                        </span>
+                                    </td>
                                     <td>
                                         <strong>{{ $kunjungan->pelanggan->nama_pelanggan }}</strong>
                                         <br>
@@ -101,7 +117,7 @@
                                                 <i class="bi bi-pencil"></i>
                                             </a>
                                             <button type="button" class="btn btn-outline-danger" title="Hapus" 
-                                                    onclick="if(confirm('Yakin ingin menghapus data kunjungan ini?')) { document.getElementById('delete-{{ $kunjungan->id }}').submit(); }">
+                                                    onclick="if(confirm('Yakin ingin menghapus data interaksi ini?')) { document.getElementById('delete-{{ $kunjungan->id }}').submit(); }">
                                                 <i class="bi bi-trash"></i>
                                             </button>
                                         </div>
@@ -113,9 +129,9 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="6" class="text-center py-4">
+                                    <td colspan="7" class="text-center py-4">
                                         <i class="bi bi-inbox display-4 text-muted d-block mb-2"></i>
-                                        <p class="text-muted">Tidak ada data kunjungan</p>
+                                        <p class="text-muted">Tidak ada data interaksi</p>
                                     </td>
                                 </tr>
                             @endforelse

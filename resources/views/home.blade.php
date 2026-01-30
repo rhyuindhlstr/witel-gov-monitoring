@@ -38,6 +38,12 @@
     </div>
 
     <!-- Stats Cards -->
+    
+    <!-- SALES STATS -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="h5 font-weight-bold text-dark mb-0">Sales Performance</h5>
+    </div>
+
     <div class="row mb-4">
         <!-- Total Sales -->
         <div class="col-xl-3 col-md-6 mb-4">

@@ -592,9 +592,9 @@
                 <span>Data Pelanggan</span>
             </a>
             <a href="{{ route('kunjungan.index') }}"
-                class="nav-link {{ request()->routeIs('kunjungan.*') ? 'active' : '' }}" title="Kunjungan">
-                <i class="bi bi-calendar-check"></i>
-                <span>Kunjungan</span>
+                class="nav-link {{ request()->routeIs('kunjungan.*') ? 'active' : '' }}" title="Interaksi">
+                <i class="bi bi-chat-square-text"></i>
+                <span>Interaksi</span>
             </a>
             <a href="{{ route('pembayaran.index') }}"
                 class="nav-link {{ request()->routeIs('pembayaran.*') ? 'active' : '' }}" title="Pembayaran">
@@ -668,12 +668,12 @@
                     <button class="header-icon-btn position-relative" title="Notifications" data-bs-toggle="dropdown"
                         aria-expanded="false">
                         <i class="bi bi-bell"></i>
-                        @unless(session('notifications_read'))
+                        @if(Auth::user()->unreadNotifications->count() > 0)
                             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
                                 style="font-size: 0.5rem; padding: 0.25em 0.4em;">
-                                4
+                                {{ Auth::user()->unreadNotifications->count() }}
                             </span>
-                        @endunless
+                        @endif
                     </button>
                     <div class="dropdown-menu dropdown-menu-end shadow border-0 mt-2" style="width: 320px;">
                         <div class="d-flex justify-content-between align-items-center px-3 py-2 border-bottom">
@@ -687,73 +687,26 @@
                             </form>
                         </div>
                         <div class="list-group list-group-flush" style="max-height: 300px; overflow-y: auto;">
-                            <!-- Payment Reminder -->
-                            <a href="{{ route('pembayaran.show', 1) }}"
-                                class="list-group-item list-group-item-action px-3 py-3 border-bottom-0">
+                            @forelse(Auth::user()->notifications->take(5) as $notification)
+                            <a href="{{ $notification->data['action_url'] ?? '#' }}"
+                                class="list-group-item list-group-item-action px-3 py-3 {{ $notification->read_at ? '' : 'bg-light' }}">
                                 <div class="d-flex align-items-start">
-                                    <div class="bg-warning bg-opacity-10 text-warning rounded-circle p-2 me-3 d-flex align-items-center justify-content-center"
+                                    <div class="bg-{{ $notification->data['type'] ?? 'primary' }} bg-opacity-10 text-{{ $notification->data['type'] ?? 'primary' }} rounded-circle p-2 me-3 d-flex align-items-center justify-content-center"
                                         style="width: 32px; height: 32px; min-width: 32px;">
-                                        <i class="bi bi-exclamation-circle-fill" style="font-size: 0.9rem;"></i>
+                                        <i class="{{ $notification->data['icon'] ?? 'bi-bell' }}" style="font-size: 0.9rem;"></i>
                                     </div>
                                     <div>
-                                        <p class="mb-1 small fw-bold text-dark">Jatuh Tempo Pembayaran</p>
-                                        <p class="mb-1 small text-muted">Tagihan Dinas Pendidikan akan jatuh tempo dalam
-                                            3 hari (25 Jan 2026).</p>
-                                        <small class="text-secondary" style="font-size: 0.7rem;">2 hours ago</small>
+                                        <p class="mb-1 small fw-bold text-dark">{{ $notification->data['title'] ?? 'Notification' }}</p>
+                                        <p class="mb-1 small text-muted">{{ $notification->data['message'] ?? '' }}</p>
+                                        <small class="text-secondary" style="font-size: 0.7rem;">{{ $notification->created_at->diffForHumans() }}</small>
                                     </div>
                                 </div>
                             </a>
-
-                            <!-- Visit Schedule -->
-                            <a href="{{ route('kunjungan.show', 1) }}"
-                                class="list-group-item list-group-item-action px-3 py-3 border-bottom-0">
-                                <div class="d-flex align-items-start">
-                                    <div class="bg-danger bg-opacity-10 text-danger rounded-circle p-2 me-3 d-flex align-items-center justify-content-center"
-                                        style="width: 32px; height: 32px; min-width: 32px;">
-                                        <i class="bi bi-calendar-event-fill" style="font-size: 0.9rem;"></i>
-                                    </div>
-                                    <div>
-                                        <p class="mb-1 small fw-bold text-dark">Jadwal Kunjungan</p>
-                                        <p class="mb-1 small text-muted">Anda memiliki jadwal kunjungan ke Dinas
-                                            Kesehatan pukul 10:00 WIB.</p>
-                                        <small class="text-secondary" style="font-size: 0.7rem;">5 hours ago</small>
-                                    </div>
-                                </div>
-                            </a>
-
-                            <!-- Payment Status -->
-                            <a href="{{ route('pembayaran.show', 1) }}"
-                                class="list-group-item list-group-item-action px-3 py-3 border-bottom-0">
-                                <div class="d-flex align-items-start">
-                                    <div class="bg-success bg-opacity-10 text-success rounded-circle p-2 me-3 d-flex align-items-center justify-content-center"
-                                        style="width: 32px; height: 32px; min-width: 32px;">
-                                        <i class="bi bi-check-circle-fill" style="font-size: 0.9rem;"></i>
-                                    </div>
-                                    <div>
-                                        <p class="mb-1 small fw-bold text-dark">Pembayaran Diterima</p>
-                                        <p class="mb-1 small text-muted">Pembayaran dari Dinas PU sebesar Rp 50.000.000
-                                            telah lunas.</p>
-                                        <small class="text-secondary" style="font-size: 0.7rem;">1 day ago</small>
-                                    </div>
-                                </div>
-                            </a>
-
-                            <!-- Passive Customer Alert -->
-                            <a href="{{ route('pelanggan.show', 1) }}"
-                                class="list-group-item list-group-item-action px-3 py-3">
-                                <div class="d-flex align-items-start">
-                                    <div class="bg-danger bg-opacity-10 text-danger rounded-circle p-2 me-3 d-flex align-items-center justify-content-center"
-                                        style="width: 32px; height: 32px; min-width: 32px;">
-                                        <i class="bi bi-bell-fill" style="font-size: 0.9rem;"></i>
-                                    </div>
-                                    <div>
-                                        <p class="mb-1 small fw-bold text-dark">Alert Pelanggan Pasif</p>
-                                        <p class="mb-1 small text-muted">Dinas Perhubungan belum dikunjungi dalam 30
-                                            hari terakhir.</p>
-                                        <small class="text-secondary" style="font-size: 0.7rem;">2 days ago</small>
-                                    </div>
-                                </div>
-                            </a>
+                            @empty
+                            <div class="p-3 text-center text-muted">
+                                <small>No notifications</small>
+                            </div>
+                            @endforelse
                         </div>
                         <div class="text-center p-2 border-top">
                             <a href="{{ route('notifications.index') }}"
