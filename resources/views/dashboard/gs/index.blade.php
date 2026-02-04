@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.gs')
 
 @section('content')
 
@@ -91,9 +91,17 @@
             <tbody>
                 @forelse ($aktivitasTerbaru as $a)
                     <tr>
-                        <td>{{ $a->tanggal }}</td>
+                        <td>{{ \Carbon\Carbon::parse($a->tanggal)->format('Y-m-d') }}</td>
                         <td>
-                            <span class="badge bg-info">
+                            @php
+                                $badgeColor = match(strtoupper($a->jenis_aktivitas)) {
+                                    'PRESENTASI', 'VISIT', 'CALL', 'MEETING' => 'info',
+                                    'NEGOSIASI', 'DEAL' => 'success',
+                                    'LOSE', 'CANCEL' => 'danger',
+                                    default => 'primary',
+                                };
+                            @endphp
+                            <span class="badge bg-{{ $badgeColor }}">
                                 {{ strtoupper($a->jenis_aktivitas) }}
                             </span>
                         </td>
@@ -134,8 +142,8 @@ new Chart(document.getElementById('chartNilai'),{
                 {{ $chartNilai['estimasi'] }},
                 {{ $chartNilai['realisasi'] }}
             ],
-            borderColor:'#0d6efd',
-            backgroundColor:'rgba(13,110,253,.1)',
+            borderColor:'#e30613', // CHANGED TO RED
+            backgroundColor:'rgba(227, 6, 19, 0.1)', // CHANGED TO LIGHT RED
             tension:.4,
             fill:true
         }]

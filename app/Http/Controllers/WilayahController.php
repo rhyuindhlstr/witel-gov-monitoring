@@ -7,59 +7,88 @@ use Illuminate\Http\Request;
 
 class WilayahController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
     public function index()
     {
-        $wilayahs = Wilayah::latest()->get();
-        return view('wilayah.index', compact('wilayahs'));
+        $wilayahs = Wilayah::all();
+        
+
+
+        return view('admin.wilayah.index', compact('wilayahs'));
     }
 
+    /**
+     * Show the form for creating a new resource.
+     */
     public function create()
     {
-        return view('wilayah.create');
+
+
+        return view('admin.wilayah.create');
     }
 
+    /**
+     * Store a newly created resource in storage.
+     */
     public function store(Request $request)
     {
-        $request->validate([
-            'nama_wilayah' => 'required|string|max:100',
+        $validated = $request->validate([
+            'nama_wilayah' => 'required|string|max:255',
+            'code'         => 'nullable|string|max:255',
+            'keterangan'   => 'nullable|string',
         ]);
 
-        Wilayah::create($request->all());
+        Wilayah::create($validated);
 
-        return redirect()
-            ->route('wilayah.index')
-            ->with('success', 'Wilayah berhasil ditambahkan');
+        return redirect()->route('wilayah.index')
+            ->with('success', 'Wilayah successfully created.');
     }
 
+    /**
+     * Display the specified resource.
+     */
     public function show(Wilayah $wilayah)
     {
-        return view('wilayah.show', compact('wilayah'));
+        //
     }
 
+    /**
+     * Show the form for editing the specified resource.
+     */
     public function edit(Wilayah $wilayah)
     {
-        return view('wilayah.edit', compact('wilayah'));
+
+
+        return view('admin.wilayah.edit', compact('wilayah'));
     }
 
+    /**
+     * Update the specified resource in storage.
+     */
     public function update(Request $request, Wilayah $wilayah)
     {
-        $request->validate([
-            'nama_wilayah' => 'required|string|max:100',
+        $validated = $request->validate([
+            'nama_wilayah' => 'required|string|max:255',
+            'code'         => 'nullable|string|max:255',
+            'keterangan'   => 'nullable|string',
         ]);
 
-        $wilayah->update($request->all());
+        $wilayah->update($validated);
 
-        return redirect()
-            ->route('wilayah.index')
-            ->with('success', 'Wilayah berhasil diperbarui');
+        return redirect()->route('wilayah.index')
+            ->with('success', 'Wilayah successfully updated.');
     }
 
+    /**
+     * Remove the specified resource from storage.
+     */
     public function destroy(Wilayah $wilayah)
     {
         $wilayah->delete();
 
-        return redirect()
-            ->route('wilayah.index')
-            ->with('success', 'Wilayah berhasil dihapus');
+        return redirect()->route('wilayah.index')
+            ->with('success', 'Wilayah successfully deleted.');
     }
 }

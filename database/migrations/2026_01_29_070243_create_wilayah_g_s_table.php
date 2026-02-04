@@ -4,11 +4,14 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateWilayahsTable extends Migration
+return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
-        Schema::create('wilayahs', function (Blueprint $table) {
+        Schema::create('wilayah_g_s', function (Blueprint $table) {
             $table->id();
             $table->string('nama_wilayah');
             $table->text('keterangan')->nullable();
@@ -16,8 +19,11 @@ class CreateWilayahsTable extends Migration
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
-        Schema::dropIfExists('wilayahs');
+        Schema::dropIfExists('wilayah_g_s');
     }
-}
+};
