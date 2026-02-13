@@ -27,6 +27,17 @@ action="{{ route('aktivitas-marketing.update',$aktivitas_marketing->id) }}">
 @endforeach
 </select>
 
+<div class="row">
+<div class="col-md-6 mb-3">
+<label>ID AM</label>
+<input type="text" class="form-control bg-light" value="{{ $aktivitas_marketing->peluang->id_am ?? '-' }}" readonly>
+</div>
+<div class="col-md-6 mb-3">
+<label>Nama AM</label>
+<input type="text" class="form-control bg-light" value="{{ $aktivitas_marketing->peluang->nama_am ?? '-' }}" readonly>
+</div>
+</div>
+
 <label>Tanggal</label>
 <input type="date" name="tanggal" class="form-control mb-3"
 value="{{ $aktivitas_marketing->tanggal }}">
@@ -35,7 +46,7 @@ value="{{ $aktivitas_marketing->tanggal }}">
 <input type="text" name="jenis_aktivitas" class="form-control mb-3"
 value="{{ $aktivitas_marketing->jenis_aktivitas }}">
 
-<label>Hasil</label>
+<label>Keterangan Kegiatan</label>
 <input type="text" name="hasil" class="form-control mb-3"
 value="{{ $aktivitas_marketing->hasil }}">
 

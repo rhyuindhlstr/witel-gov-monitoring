@@ -7,7 +7,7 @@
          style="background: linear-gradient(90deg,#b30000,#ff1a1a); color:white;">
         <div class="card-body">
             <h4 class="fw-bold mb-1">Tambah Wilayah</h4>
-            <small>Input data wilayah Government Service</small>
+            <small>Input data wilayah Witel Government Service</small>
         </div>
     </div>
 

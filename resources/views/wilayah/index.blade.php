@@ -4,8 +4,8 @@
 <div class="container-fluid">
 
     {{-- HEADER MERAH --}}
-    <div class="card mb-4 border-0 shadow-sm"
-         style="background: linear-gradient(90deg,#b30000,#ff1a1a); color:white;">
+    <div class="card mb-4 shadow"
+         style="background:linear-gradient(90deg,#b30000,#ff1a1a);color:white">
         <div class="card-body">
             <h4 class="fw-bold mb-1">Data Wilayah</h4>
             <small>Pengelolaan wilayah Government Service</small>
@@ -14,16 +14,16 @@
 
     {{-- ACTION --}}
     <div class="mb-3 text-end">
-        <a href="{{ route('wilayah.create') }}" class="btn btn-primary">
+        <a href="{{ route('wilayah.create') }}" class="btn btn-danger">
             + Tambah Wilayah
         </a>
     </div>
 
     {{-- TABLE --}}
     <div class="card shadow-sm">
-        <div class="card-body p-0">
-            <table class="table table-bordered table-hover mb-0">
-                <thead class="table-danger text-center">
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped table-hover align-middle mb-0">
+                <thead class="bg-danger text-white text-center">
                     <tr>
                         <th width="60">No</th>
                         <th>Nama Wilayah</th>

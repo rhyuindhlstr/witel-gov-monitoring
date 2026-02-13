@@ -4,12 +4,17 @@ namespace App\Http\Controllers;
 
 
 use Illuminate\Http\Request;
+use App\Imports\PembayaranImport;
+use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Validators\ValidationException;
 use App\Models\PembayaranPelanggan;
 use App\Models\Pelanggan;
 use Carbon\Carbon;
 
 class PembayaranPelangganController extends Controller
 {
+    
+    
     /**
      * Display a listing of the resource.
      */
@@ -140,5 +145,36 @@ class PembayaranPelangganController extends Controller
         
         return redirect()->route('pembayaran.index')
                         ->with('success', 'Data pembayaran berhasil dihapus');
+    }
+
+    /**
+     * Menampilkan form untuk import data pembayaran.
+     */
+    public function showImportForm()
+    {
+        return view('ssgs.pembayaran.import');
+    }
+
+    /**
+     * Menangani proses import data dari file Excel.
+     */
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls',
+        ]);
+
+        try {
+            Excel::import(new PembayaranImport, $request->file('file'));
+        } catch (ValidationException $e) {
+             $failures = $e->failures();
+             $errors = [];
+             foreach ($failures as $failure) {
+                 $errors[] = "Baris " . $failure->row() . ": " . implode(', ', $failure->errors()) . " (nilai: '" . $failure->values()[$failure->attribute()] . "').";
+             }
+             return back()->with('import_errors', $errors);
+        }
+
+        return redirect()->route('pembayaran.index')->with('success', 'Data pembayaran berhasil diimpor.');
     }
 }

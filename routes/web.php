@@ -12,6 +12,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\HomeGSController;
 use App\Http\Controllers\PeluangProyekGSController;
 use App\Http\Controllers\AktivitasMarketingController;
+use App\Http\Middleware\RoleMiddleware;
 
 // Redirect root to login
 Route::get('/', function () {
@@ -39,9 +40,15 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // SSGS Module Routes
+    Route::middleware(['auth', RoleMiddleware::class . ':ssgs'])->prefix('ssgs')->group(function () {
+    // Route untuk fitur import pembayaran (Harus diletakkan sebelum resource agar tidak dianggap sebagai ID)
+    Route::get('/pembayaran/import', [PembayaranPelangganController::class, 'showImportForm'])->name('ssgs.pembayaran.import.form');
+    Route::post('/pembayaran/import', [PembayaranPelangganController::class, 'import'])->name('ssgs.pembayaran.import');
+
     Route::resource('pelanggan', PelangganController::class);
     Route::resource('kunjungan', KunjunganPelangganController::class);
     Route::resource('pembayaran', PembayaranPelangganController::class);
+});
 
     // Data Wilayah (Accessible by all roles)
     Route::resource('wilayah', WilayahController::class);
@@ -53,6 +60,8 @@ Route::middleware(['auth'])->group(function () {
     // GS Module Routes
     Route::get('/dashboard-gs', [HomeGSController::class, 'index'])->name('dashboard.gs');
     Route::get('peluang-gs/export', [PeluangProyekGSController::class, 'export'])->name('peluang-gs.export');
+    Route::get('peluang-gs/import', [PeluangProyekGSController::class, 'showImportForm'])->name('peluang-gs.import.form');
+    Route::post('peluang-gs/import', [PeluangProyekGSController::class, 'import'])->name('peluang-gs.import');
     Route::get('peluang-gs/{peluang_g}/pdf', [PeluangProyekGSController::class, 'exportPdf'])->name('peluang-gs.pdf');
     Route::resource('peluang-gs', PeluangProyekGSController::class);
     Route::resource('aktivitas-marketing', AktivitasMarketingController::class);

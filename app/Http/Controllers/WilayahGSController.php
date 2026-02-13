@@ -45,7 +45,7 @@ class WilayahGSController extends Controller
      */
     public function show(WilayahGS $data_wilayah_g)
     {
-        //
+        return view('wilayah-gs.show', ['wilayah' => $data_wilayah_g]);
     }
 
     /**

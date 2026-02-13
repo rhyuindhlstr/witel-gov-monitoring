@@ -18,9 +18,14 @@
                         <i class="bi bi-cash-coin text-danger me-2"></i>
                         Daftar Pembayaran
                     </h5>
-                    <a href="{{ route('pembayaran.create') }}" class="btn btn-telkom">
-                        <i class="bi bi-plus-circle me-2"></i>Tambah Pembayaran
-                    </a>
+                    <div>
+                        <a href="{{ route('ssgs.pembayaran.import.form') }}" class="btn btn-success me-2">
+                            <i class="bi bi-file-earmark-excel me-2"></i>Import Excel
+                        </a>
+                        <a href="{{ route('pembayaran.create') }}" class="btn btn-telkom">
+                            <i class="bi bi-plus-circle me-2"></i>Tambah Pembayaran
+                        </a>
+                    </div>
                 </div>
                 
                 <!-- Filter Form -->
@@ -64,7 +69,7 @@
                         </div>
                     </div>
                 </form>
-                
+
                 <!-- Table -->
                 <div class="table-responsive">
                     <table class="table table-hover align-middle">

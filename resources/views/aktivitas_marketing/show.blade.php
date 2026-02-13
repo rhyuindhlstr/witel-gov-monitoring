@@ -28,12 +28,22 @@ style="background:linear-gradient(90deg,#b30000,#ff1a1a);color:white">
 </tr>
 
 <tr>
+<th>ID AM</th>
+<td>{{ $aktivitas_marketing->peluang->id_am ?? '-' }}</td>
+</tr>
+
+<tr>
+<th>Nama AM</th>
+<td>{{ $aktivitas_marketing->peluang->nama_am ?? '-' }}</td>
+</tr>
+
+<tr>
 <th>Jenis Aktivitas</th>
 <td>{{ $aktivitas_marketing->jenis_aktivitas }}</td>
 </tr>
 
 <tr>
-<th>Hasil</th>
+<th>Keterangan Kegiatan</th>
 <td>{{ $aktivitas_marketing->hasil }}</td>
 </tr>
 

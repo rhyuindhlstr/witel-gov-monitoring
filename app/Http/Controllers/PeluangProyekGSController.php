@@ -8,12 +8,31 @@ use App\Models\PeluangProyekGSLog;
 use App\Exports\PeluangProyekGSExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Imports\PeluangProyekGSImport; // Ensure you create this Import class
 use Maatwebsite\Excel\Facades\Excel;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 // Controller for GS Projects
 class PeluangProyekGSController extends Controller
 {
+    public function showImportForm()
+{
+    return view('peluang-gs.import');
+}
+
+public function import(Request $request)
+{
+    $request->validate([
+        'file' => 'required|mimes:xlsx,xls,csv',
+    ]);
+
+    try {
+        Excel::import(new PeluangProyekGSImport, $request->file('file'));
+        return redirect()->route('peluang-gs.index')->with('success', 'Data Peluang Proyek berhasil diimport!');
+    } catch (\Exception $e) {
+        return redirect()->back()->with('error', 'Gagal mengimport data: ' . $e->getMessage());
+    }
+}
     public function index(Request $request)
     {
         $peluang = PeluangProyekGS::with('wilayah')

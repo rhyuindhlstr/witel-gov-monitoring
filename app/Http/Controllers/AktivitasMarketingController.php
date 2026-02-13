@@ -11,11 +11,19 @@ class AktivitasMarketingController extends Controller
     /* =========================
      * INDEX
      * ========================= */
-    public function index()
+    public function index(Request $request)
     {
-        $aktivitas = AktivitasMarketing::with('peluang.wilayah')
-            ->orderByDesc('created_at')
-            ->get();
+        $query = AktivitasMarketing::with('peluang.wilayah');
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->whereHas('peluang', function($q) use ($search) {
+                $q->where('nama_am', 'like', "%{$search}%")
+                  ->orWhere('id_am', 'like', "%{$search}%");
+            });
+        }
+
+        $aktivitas = $query->orderByDesc('tanggal')->get();
 
         return view('aktivitas_marketing.index', compact('aktivitas'));
     }
