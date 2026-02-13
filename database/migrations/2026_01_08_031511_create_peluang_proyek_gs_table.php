@@ -27,10 +27,11 @@ return new class extends Migration {
 
             $table->timestamps();
 
-            $table->foreign('wilayah_id')
-                  ->references('id')
-                  ->on('wilayahs')
-                  ->onDelete('cascade');
+            // Foreign key removed here to allow re-linking to wilayah_gs in later migration
+            // $table->foreign('wilayah_id')
+            //       ->references('id')
+            //       ->on('wilayahs')
+            //       ->onDelete('cascade');
         });
     }
 

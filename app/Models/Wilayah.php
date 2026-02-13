@@ -12,6 +12,7 @@ class Wilayah extends Model
     protected $fillable = [
         'nama_wilayah',
         'keterangan',
+        'code',
     ];
 
     // relasi ke peluang (opsional, tapi penting buat dashboard)
