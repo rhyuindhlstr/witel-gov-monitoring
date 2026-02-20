@@ -18,9 +18,14 @@
                         <i class="bi bi-building text-danger me-2"></i>
                         Daftar Pelanggan
                     </h5>
-                    <a href="{{ route('pelanggan.create') }}" class="btn btn-telkom">
-                        <i class="bi bi-plus-circle me-2"></i>Tambah Pelanggan
-                    </a>
+                    <div class="d-flex gap-2">
+                        <a href="{{ route('pelanggan.export') }}" class="btn btn-outline-danger">
+                            <i class="bi bi-download me-1"></i>Export
+                        </a>
+                        <a href="{{ route('pelanggan.create') }}" class="btn btn-telkom">
+                            <i class="bi bi-plus-circle me-1"></i>Tambah Pelanggan
+                        </a>
+                    </div>
                 </div>
                 
                 <!-- Filter Form -->

@@ -37,11 +37,32 @@ class KunjunganPelangganController extends Controller
             $query->where('metode', $request->metode);
         }
         
+        
         $kunjungans = $query->latest('tanggal_kunjungan')->paginate(20);
         $pelanggans = Pelanggan::all();
         $users = User::where('email', '!=', 'admin@telkom.com')->get();
+
+        // Fetch tertunda payments
+        $delayedPayments = \App\Models\PembayaranPelanggan::with(['pelanggan'])
+                                ->tertunda()
+                                ->orderBy('tanggal_jatuh_tempo', 'asc')
+                                ->get()
+                                ->filter(function ($payment) {
+                                    // Skip if due date is null
+                                    if (!$payment->tanggal_jatuh_tempo) {
+                                        return true;
+                                    }
+                                    
+                                    // Check if there is any interaction for this customer
+                                    // AFTER or ON the due date
+                                    $hasInteraction = KunjunganPelanggan::where('pelanggan_id', $payment->pelanggan_id)
+                                        ->whereDate('tanggal_kunjungan', '>=', $payment->tanggal_jatuh_tempo)
+                                        ->exists();
+                                        
+                                    return !$hasInteraction;
+                                });
         
-        return view('ssgs.kunjungan.index', compact('kunjungans', 'pelanggans', 'users'));
+        return view('ssgs.kunjungan.index', compact('kunjungans', 'pelanggans', 'users', 'delayedPayments'));
     }
 
     /**

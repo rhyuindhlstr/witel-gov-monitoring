@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Imports\PembayaranImport;
+use App\Exports\PembayaranExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Validators\ValidationException;
 use App\Models\PembayaranPelanggan;
@@ -170,11 +171,21 @@ class PembayaranPelangganController extends Controller
              $failures = $e->failures();
              $errors = [];
              foreach ($failures as $failure) {
-                 $errors[] = "Baris " . $failure->row() . ": " . implode(', ', $failure->errors()) . " (nilai: '" . $failure->values()[$failure->attribute()] . "').";
+                 $errors[] = "Baris " . $failure->row() . ": " . implode(', ', $failure->errors()) . " (nilai: '" . ($failure->values()[$failure->attribute()] ?? 'N/A') . "').";
              }
              return back()->with('import_errors', $errors);
         }
 
         return redirect()->route('pembayaran.index')->with('success', 'Data pembayaran berhasil diimpor.');
+    }
+
+    /**
+     * Export data pembayaran ke Excel (dengan filter aktif).
+     */
+    public function export(Request $request)
+    {
+        $filters = $request->only(['pelanggan_id', 'status', 'start_date', 'end_date']);
+        $filename = 'data-pembayaran-' . now()->format('Y-m-d') . '.xlsx';
+        return Excel::download(new PembayaranExport($filters), $filename);
     }
 }

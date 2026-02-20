@@ -16,10 +16,10 @@
 
     <style>
         :root {
-            --telkom-red: #EF4444;
-            --telkom-red-dark: #DC2626;
-            --telkom-red-light: #F87171;
-            --telkom-red-accent: #B91C1C;
+            --telkom-red: #CC0000;
+            --telkom-red-dark: #AA0000;
+            --telkom-red-light: #E03333;
+            --telkom-red-accent: #990000;
             --telkom-gray: #6C757D;
             --telkom-light: #F8F9FA;
             --sidebar-width: 300px;

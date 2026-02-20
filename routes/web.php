@@ -45,6 +45,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/pembayaran/import', [PembayaranPelangganController::class, 'showImportForm'])->name('ssgs.pembayaran.import.form');
     Route::post('/pembayaran/import', [PembayaranPelangganController::class, 'import'])->name('ssgs.pembayaran.import');
 
+    // Route untuk export
+    Route::get('/pelanggan/export', [PelangganController::class, 'export'])->name('pelanggan.export');
+    Route::get('/pembayaran/export', [PembayaranPelangganController::class, 'export'])->name('pembayaran.export');
+
     Route::resource('pelanggan', PelangganController::class);
     Route::resource('kunjungan', KunjunganPelangganController::class);
     Route::resource('pembayaran', PembayaranPelangganController::class);

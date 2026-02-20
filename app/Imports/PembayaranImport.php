@@ -17,9 +17,17 @@ class PembayaranImport implements ToModel, WithHeadingRow, WithValidation
     */
     public function model(array $row)
     {
+        // Handle both Excel serial dates (number) and plain text dates (string)
+        $tanggal = $row['tanggal_pembayaran'];
+        if (is_numeric($tanggal)) {
+            $tanggal = Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($tanggal));
+        } else {
+            $tanggal = Carbon::parse($tanggal);
+        }
+
         return new PembayaranPelanggan([
             'pelanggan_id'       => $row['pelanggan_id'],
-            'tanggal_pembayaran' => Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['tanggal_pembayaran'])),
+            'tanggal_pembayaran' => $tanggal,
             'nominal'            => $row['nominal'],
             'status_pembayaran'  => $row['status_pembayaran'] ?? 'lancar',
             'keterangan'         => $row['keterangan'] ?? null,

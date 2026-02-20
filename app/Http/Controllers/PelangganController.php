@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Pelanggan;
 use App\Models\Wilayah;
+use App\Exports\PelangganExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PelangganController extends Controller
 {
@@ -137,5 +139,14 @@ class PelangganController extends Controller
         
         return redirect()->route('pelanggan.index')
                         ->with('success', 'Data pelanggan berhasil dihapus');
+    }
+
+    /**
+     * Export data pelanggan ke Excel.
+     */
+    public function export()
+    {
+        $filename = 'data-pelanggan-' . now()->format('Y-m-d') . '.xlsx';
+        return Excel::download(new PelangganExport, $filename);
     }
 }

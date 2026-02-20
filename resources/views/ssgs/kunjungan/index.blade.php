@@ -91,6 +91,35 @@
                             </tr>
                         </thead>
                         <tbody>
+                                @foreach($delayedPayments as $payment)
+                                    <tr>
+                                        <td class="text-center">
+                                            <i class="bi bi-exclamation-circle text-danger" title="Pembayaran Tertunda"></i>
+                                        </td>
+                                        <td>
+                                            <span class="text-danger fw-bold">{{ $payment->tanggal_jatuh_tempo ? $payment->tanggal_jatuh_tempo->format('d M Y') : '-' }}</span>
+                                            <div class="small text-muted">Jatuh Tempo</div>
+                                        </td>
+                                        <td class="text-center text-muted">-</td>
+                                        <td>
+                                            <strong>{{ $payment->pelanggan->nama_pelanggan }}</strong>
+                                            <div class="text-muted small">{{ $payment->pelanggan->nama_pic }}</div>
+                                            <div class="text-danger small mt-1">
+                                                <i class="bi bi-cash-coin me-1"></i>Tagihan: {{ $payment->formatted_nominal }}
+                                            </div>
+                                        </td>
+                                        <td class="text-center text-muted">-</td>
+                                        <td class="text-center text-muted">-</td>
+                                        <td class="text-center">
+                                            <a href="{{ route('kunjungan.create', ['pelanggan_id' => $payment->pelanggan_id]) }}" 
+                                               class="btn btn-outline-danger btn-sm" 
+                                               title="Buat Interaksi / Follow Up">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+
                             @forelse($kunjungans as $index => $kunjungan)
                                 <tr>
                                     <td>{{ $kunjungans->firstItem() + $index }}</td>

@@ -122,93 +122,176 @@
     </div>
 
     <!-- Charts Row -->
-    <div class="row">
-        <!-- Performance Chart -->
-        <div class="col-xl-8 col-lg-7">
-            <div class="card shadow-sm mb-4">
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-white border-bottom-0">
-                    <h6 class="m-0 font-weight-bold text-dark">Performance Overview</h6>
-                </div>
-                <div class="card-body">
-                    <div class="chart-area" style="height: 320px;">
-                        <canvas id="performanceChart"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Donut Chart -->
-        <div class="col-xl-4 col-lg-5">
-            <div class="card shadow-sm mb-4">
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-white border-bottom-0">
-                    <h6 class="m-0 font-weight-bold text-dark">Status Pembayaran</h6>
-                </div>
-                <div class="card-body">
-                    <div class="chart-pie pt-4 pb-2" style="height: 250px;">
-                        <canvas id="statusChart"></canvas>
-                    </div>
-                    <div class="mt-4 text-center small">
-                        <span class="me-2">
-                            <i class="bi bi-circle-fill text-danger"></i> Lancar
-                        </span>
-                        <span class="me-2">
-                            <i class="bi bi-circle-fill text-warning"></i> Tertunda
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Recent Payments -->
-    <div class="card shadow-sm mb-4">
-        <div class="card-header py-3 bg-white border-bottom-0">
-            <h6 class="m-0 font-weight-bold text-dark">Pembayaran Terakhir</h6>
-        </div>
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="bg-light">
-                        <tr>
-                            <th class="border-0 ps-4">ID</th>
-                            <th class="border-0">Tanggal</th>
-                            <th class="border-0">Pelanggan</th>
-                            <th class="border-0">Status</th>
-                            <th class="border-0 text-end pe-4">Nominal</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($recentPayments as $payment)
-                        <tr>
-                            <td class="ps-4">#{{ $payment->id }}</td>
-                            <td>{{ $payment->tanggal_pembayaran->format('d M Y') }}</td>
-                            <td>
-                                <div class="d-flex align-items-center">
-                                    <div class="avatar-sm me-2 bg-light rounded-circle d-flex align-items-center justify-content-center" style="width: 35px; height: 35px; color: #6c757d; font-weight: bold;">
-                                        {{ strtoupper(substr($payment->pelanggan->nama_pelanggan, 0, 1)) }}
-                                    </div>
-                                    <span class="fw-bold text-dark">{{ $payment->pelanggan->nama_pelanggan }}</span>
-                                </div>
-                            </td>
-                            <td>
-                                <span class="badge bg-{{ $payment->status_badge_color }} bg-opacity-10 text-{{ $payment->status_badge_color }}">
-                                    {{ ucfirst($payment->status_pembayaran) }}
+    <div class="row mb-4">
+        <!-- Performance Chart — left col, full height -->
+        <div class="col-xl-8 col-lg-7 d-flex flex-column mb-4 mb-lg-0">
+            <div class="card shadow-sm flex-fill" style="border-radius: 16px;">
+                <div class="card-header py-3 px-4 bg-white border-bottom-0" style="border-radius: 16px 16px 0 0;">
+                    <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+                        <div class="d-flex align-items-center gap-3">
+                            <h6 class="m-0 fw-bold text-dark">Performance Overview</h6>
+                            <div class="d-flex gap-2">
+                                <span class="d-flex align-items-center gap-1 small fw-semibold" style="color:#EF4444;">
+                                    <span style="width:22px;height:3px;background:#EF4444;border-radius:2px;display:inline-block;"></span> Aktual
                                 </span>
-                            </td>
-                            <td class="text-end pe-4 fw-bold">
-                                Rp {{ number_format($payment->nominal, 0, ',', '.') }}
-                            </td>
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="5" class="text-center py-4">Belum ada data pembayaran</td>
-                        </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+                                <span class="d-flex align-items-center gap-1 small fw-semibold" style="color:#94a3b8;">
+                                    <span style="width:22px;height:3px;background:#94a3b8;border-radius:2px;display:inline-block;border:1px dashed #94a3b8;"></span> Ekspektasi
+                                </span>
+                            </div>
+                        </div>
+                        <form method="GET" action="{{ route('dashboard.ssgs') }}" id="perfFilterForm" class="d-flex align-items-center gap-2">
+                            @foreach(request()->except(['perf_period','perf_year','perf_month']) as $k => $v)
+                                <input type="hidden" name="{{ $k }}" value="{{ $v }}">
+                            @endforeach
+                            <input type="hidden" name="perf_period" value="year">
+                            <label class="small text-muted fw-semibold mb-0">Tahun:</label>
+                            <select name="perf_year" class="form-select form-select-sm border-0 shadow-sm fw-semibold"
+                                    style="width:85px;border-radius:10px;" onchange="this.form.submit()">
+                                @for($y = now()->year; $y >= now()->year - 4; $y--)
+                                    <option value="{{ $y }}" {{ $perfYear == $y ? 'selected' : '' }}>{{ $y }}</option>
+                                @endfor
+                            </select>
+                        </form>
+                    </div>
+                </div>
+                <div class="card-body px-4 pb-4 d-flex align-items-stretch" style="min-height:300px;">
+                    <canvas id="performanceChart" style="width:100%;"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right column: Status Pembayaran (top) + Distribusi Metode (bottom) -->
+        <div class="col-xl-4 col-lg-5 d-flex flex-column gap-4">
+
+            <!-- Status Pembayaran -->
+            <div class="card shadow-sm flex-fill" style="border-radius:16px;">
+                <div class="card-header py-3 px-4 bg-white border-bottom-0 d-flex align-items-center justify-content-between" style="border-radius:16px 16px 0 0;">
+                    <h6 class="m-0 fw-bold text-dark">Status Pembayaran</h6>
+                    <span class="badge rounded-pill text-bg-light fw-semibold" style="font-size:.75rem;">{{ $totalAllPayments }} transaksi</span>
+                </div>
+                <div class="card-body px-4 pb-4 pt-2">
+                    @php
+                        $fmtRp = function($v) {
+                            if ($v >= 1000000000) return 'Rp '.number_format($v/1000000000,1).' M';
+                            if ($v >= 1000000)    return 'Rp '.number_format($v/1000000,1).' Jt';
+                            if ($v >= 1000)       return 'Rp '.number_format($v/1000,0).' K';
+                            return 'Rp '.number_format($v,0);
+                        };
+                        $bars = [
+                            ['label'=>'Overdue',  'color'=>'#EF4444', 'amount'=>$amountOverdue,  'count'=>$totalOverdue,  'pct'=>round($amountOverdue/$amountTotal*100)],
+                            ['label'=>'Tertunda', 'color'=>'#F59E0B', 'amount'=>$amountTertunda, 'count'=>$totalTertunda, 'pct'=>round($amountTertunda/$amountTotal*100)],
+                            ['label'=>'Lunas',    'color'=>'#22c55e', 'amount'=>$amountLancar,   'count'=>$totalLancar,   'pct'=>round($amountLancar/$amountTotal*100)],
+                        ];
+                    @endphp
+                    @foreach($bars as $bar)
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between align-items-baseline mb-1">
+                            <span class="fw-semibold text-dark" style="font-size:.875rem;">{{ $bar['label'] }}</span>
+                            <span class="text-muted small">{{ $fmtRp($bar['amount']) }}</span>
+                        </div>
+                        <div style="height:10px;background:#f1f5f9;border-radius:999px;overflow:hidden;">
+                            <div style="height:100%;width:{{ max($bar['pct'],2) }}%;border-radius:999px;background:linear-gradient(90deg,{{ $bar['color'] }} 0%,{{ $bar['color'] }}aa 100%);transition:width .6s ease;"></div>
+                        </div>
+                        <div class="text-muted mt-1" style="font-size:.72rem;">{{ $bar['count'] }} transaksi &nbsp;·&nbsp; {{ $bar['pct'] }}%</div>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <!-- Distribusi Metode Interaksi -->
+            <div class="card shadow-sm flex-fill" style="border-radius:16px;">
+                <div class="card-header bg-white border-bottom-0 py-3 px-4 d-flex justify-content-between align-items-center" style="border-radius:16px 16px 0 0;">
+                    <h6 class="m-0 fw-bold text-dark">Distribusi Metode Interaksi</h6>
+                    <span class="badge rounded-pill text-bg-light border fw-semibold" style="font-size:.73rem; color:#374151;">Semua waktu</span>
+                </div>
+                <div class="card-body px-4 pb-4 pt-1">
+                    @php
+                        $totalM = max($totalInteraksi, 1);
+                        $metodes = [
+                            ['label' => 'Visit',    'color' => '#6366f1', 'value' => $interaksiVisit],
+                            ['label' => 'Call',     'color' => '#0ea5e9', 'value' => $interaksiCall],
+                            ['label' => 'WhatsApp', 'color' => '#22c55e', 'value' => $interaksiWhatsapp],
+                        ];
+                    @endphp
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="flex-fill" style="min-width:0;">
+                            @foreach($metodes as $m)
+                            <div class="d-flex align-items-center justify-content-between py-2" style="border-bottom:1px solid #f1f5f9;">
+                                <div class="d-flex align-items-center gap-2">
+                                    <span style="width:11px;height:11px;border-radius:50%;background:{{ $m['color'] }};display:inline-block;flex-shrink:0;"></span>
+                                    <span class="fw-semibold" style="font-size:.85rem;color:#374151;">{{ $m['label'] }}</span>
+                                </div>
+                                <span class="fw-bold" style="font-size:.85rem;color:#374151;">
+                                    {{ $totalM > 0 ? number_format($m['value']/$totalM*100, 0) : 0 }}%
+                                </span>
+                            </div>
+                            @endforeach
+                            <div class="d-flex align-items-center justify-content-between pt-2">
+                                <span class="small text-muted">Total Interaksi</span>
+                                <span class="fw-bold small">{{ $totalInteraksi }}</span>
+                            </div>
+                        </div>
+                        <div style="width:120px;height:120px;flex-shrink:0;">
+                            <canvas id="interaksiDonutChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    {{-- Recent Payments --}}
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow-sm" style="border-radius:16px;">
+                <div class="card-header py-3 px-4 bg-white border-bottom-0 d-flex align-items-center justify-content-between" style="border-radius:16px 16px 0 0;">
+                    <h6 class="m-0 fw-bold text-dark">Pembayaran Terakhir</h6>
+                    <span class="badge rounded-pill text-bg-light border fw-semibold" style="font-size:.73rem; color:#374151;">5 transaksi terbaru</span>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th class="border-0 ps-4">ID</th>
+                                    <th class="border-0">Tanggal</th>
+                                    <th class="border-0">Pelanggan</th>
+                                    <th class="border-0">Status</th>
+                                    <th class="border-0 text-end pe-4">Nominal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($recentPayments as $payment)
+                                <tr>
+                                    <td class="ps-4">#{{ $payment->id }}</td>
+                                    <td>{{ $payment->tanggal_pembayaran->format('d M Y') }}</td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="me-2 bg-light rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width:35px;height:35px;color:#6c757d;">
+                                                {{ strtoupper(substr($payment->pelanggan->nama_pelanggan, 0, 1)) }}
+                                            </div>
+                                            <span class="fw-bold text-dark">{{ $payment->pelanggan->nama_pelanggan }}</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-{{ $payment->status_badge_color }} bg-opacity-10 text-{{ $payment->status_badge_color }}">
+                                            {{ ucfirst($payment->status_pembayaran) }}
+                                        </span>
+                                    </td>
+                                    <td class="text-end pe-4 fw-bold">Rp {{ number_format($payment->nominal, 0, ',', '.') }}</td>
+                                </tr>
+                                @empty
+                                <tr><td colspan="5" class="text-center py-4">Belum ada data pembayaran</td></tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+
 </div>
 @endsection
 
@@ -216,96 +299,117 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        // Performance Chart
+@php
+    $perfVisitArr    = $monthlyInteraksi['visit']    ?? array_fill(0, 12, 0);
+    $perfCallArr     = $monthlyInteraksi['call']     ?? array_fill(0, 12, 0);
+    $perfWhatsappArr = $monthlyInteraksi['whatsapp'] ?? array_fill(0, 12, 0);
+@endphp
+
+        // Performance Chart — Actual vs Expected Revenue
+        const perfLabels   = @json($perfLabels);
+        const perfActual   = @json($perfActual);
+        const perfExpected = @json($perfExpected);
+
         const ctx = document.getElementById('performanceChart').getContext('2d');
+
+        const gradRed = ctx.createLinearGradient(0, 0, 0, 280);
+        gradRed.addColorStop(0, 'rgba(239,68,68,0.15)');
+        gradRed.addColorStop(1, 'rgba(239,68,68,0)');
+
+        const gradGray = ctx.createLinearGradient(0, 0, 0, 280);
+        gradGray.addColorStop(0, 'rgba(148,163,184,0.12)');
+        gradGray.addColorStop(1, 'rgba(148,163,184,0)');
+
         const myChart = new Chart(ctx, {
-            type: 'bar',
+            type: 'line',
             data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                datasets: [{
-                    label: 'Revenue',
-                    data: @json($chartData),
-                    backgroundColor: '#EF4444',
-                    borderRadius: 4,
-                    barThickness: 20
-                }]
+                labels: perfLabels,
+                datasets: [
+                    {
+                        label: 'Revenue Aktual',
+                        data: perfActual,
+                        borderColor: '#EF4444',
+                        backgroundColor: gradRed,
+                        pointRadius: 4,
+                        pointHoverRadius: 8,
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: '#EF4444',
+                        pointBorderWidth: 2,
+                        tension: 0.45,
+                        fill: true,
+                        borderWidth: 2.5,
+                    },
+                    {
+                        label: 'Revenue Ekspektasi',
+                        data: perfExpected,
+                        borderColor: '#94a3b8',
+                        backgroundColor: gradGray,
+                        pointRadius: 4,
+                        pointHoverRadius: 8,
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: '#94a3b8',
+                        pointBorderWidth: 2,
+                        borderDash: [6, 4],
+                        tension: 0.45,
+                        fill: true,
+                        borderWidth: 2,
+                    }
+                ]
             },
             options: {
                 maintainAspectRatio: false,
+                interaction: { mode: 'index', intersect: false },
                 plugins: {
-                    legend: {
-                        display: false
-                    },
+                    legend: { display: false },
                     tooltip: {
                         backgroundColor: '#fff',
-                        titleColor: '#2C3E50',
-                        bodyColor: '#2C3E50',
-                        borderColor: '#E9ECEF',
+                        titleColor: '#1e293b',
+                        bodyColor: '#475569',
+                        borderColor: '#e2e8f0',
                         borderWidth: 1,
-                        padding: 10,
-                        displayColors: false,
+                        padding: 12,
+                        boxPadding: 5,
+                        cornerRadius: 10,
+                        callbacks: {
+                            label: function(c) {
+                                const v = c.raw;
+                                const fmt = v >= 1000000 ? 'Rp '+(v/1000000).toFixed(1)+' Jt'
+                                          : v >= 1000    ? 'Rp '+(v/1000).toFixed(0)+' K'
+                                          : 'Rp '+v;
+                                return ' ' + c.dataset.label + ': ' + fmt;
+                            },
+                            afterBody: function(items) {
+                                const a = items[0]?.raw ?? 0;
+                                const e = items[1]?.raw ?? 0;
+                                if (e > 0 && a < e) {
+                                    const gap = e - a;
+                                    const pct = ((gap/e)*100).toFixed(1);
+                                    const fmtGap = gap >= 1000000 ? 'Rp '+(gap/1000000).toFixed(1)+' Jt'
+                                                 : gap >= 1000    ? 'Rp '+(gap/1000).toFixed(0)+' K'
+                                                 : 'Rp '+gap;
+                                    return [' ─────────────────', ' Gap: ' + fmtGap + ' ('+pct+'%)'];
+                                }
+                                return [];
+                            }
+                        }
                     }
                 },
                 scales: {
+                    x: { grid: { display: false }, ticks: { color: '#94a3b8', maxRotation: 0 } },
                     y: {
                         beginAtZero: true,
-                        grid: {
-                            display: true,
-                            borderDash: [2, 2],
-                            color: '#e9ecef'
-                        },
+                        grid: { color: '#f1f5f9', borderDash: [4,4] },
                         ticks: {
-                            callback: function(value, index, values) {
-                                if (value >= 1000000) return 'Rp ' + (value/1000000).toFixed(0) + 'M';
-                                if (value >= 1000) return 'Rp ' + (value/1000).toFixed(0) + 'K';
-                                return 'Rp ' + value;
-                            }
-                        }
-                    },
-                    x: {
-                        grid: {
-                            display: false
+                            color: '#64748b',
+                            callback: v => v >= 1000000 ? 'Rp '+(v/1000000).toFixed(0)+'M'
+                                        : v >= 1000    ? 'Rp '+(v/1000).toFixed(0)+'K'
+                                        : 'Rp '+v
                         }
                     }
                 }
             }
         });
 
-        // Status Chart
-        const pendingCount = {{ $pendingPayments }};
-        const totalCount = {{ $totalSales }}; // proxy total transactions
-        // Prevent negative success count if pending > total which shouldn't happen but fallback
-        const successCount = Math.max(0, totalCount - pendingCount);
-
-        const ctx2 = document.getElementById('statusChart').getContext('2d');
-        const myPieChart = new Chart(ctx2, {
-            type: 'doughnut',
-            data: {
-                labels: ['Lancar', 'Tertunda'],
-                datasets: [{
-                    data: [successCount, pendingCount],
-                    backgroundColor: ['#EF4444', '#ffc107'],
-                    hoverBackgroundColor: ['#DC2626', '#ffca2c'],
-                    borderWidth: 0
-                }],
-            },
-            options: {
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    tooltip: {
-                        backgroundColor: '#fff',
-                        bodyColor: '#2C3E50',
-                        borderColor: '#E9ECEF',
-                        borderWidth: 1,
-                        padding: 10
-                    }
-                },
-                cutout: '75%',
-            },
-        });
     });
 
     // Dashboard Filter Controls
@@ -494,5 +598,36 @@
             alertDiv.remove();
         }, 3000);
     }
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // === Donut Distribusi Metode ===
+    const donutCtx = document.getElementById('interaksiDonutChart').getContext('2d');
+    new Chart(donutCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Visit', 'Call', 'WhatsApp'],
+            datasets: [{
+                data: [{{ $interaksiVisit }}, {{ $interaksiCall }}, {{ $interaksiWhatsapp }}],
+                backgroundColor: ['#6366f1', '#0ea5e9', '#22c55e'],
+                hoverBackgroundColor: ['#4f46e5', '#0284c7', '#16a34a'],
+                borderWidth: 4,
+                borderColor: '#fff'
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    backgroundColor: '#fff', bodyColor: '#1e293b', titleColor: '#1e293b',
+                    borderColor: '#e2e8f0', borderWidth: 1, padding: 10
+                }
+            },
+            cutout: '68%'
+        }
+    });
+});
 </script>
 @endpush

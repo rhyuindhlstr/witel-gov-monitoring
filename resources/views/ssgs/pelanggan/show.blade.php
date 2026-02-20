@@ -61,7 +61,7 @@
                 <ul class="nav nav-tabs card-header-tabs" role="tablist">
                     <li class="nav-item">
                         <a class="nav-link active" data-bs-toggle="tab" href="#kunjungan">
-                            <i class="bi bi-calendar-check me-1"></i>Kunjungan ({{ $pelanggan->kunjungan->count() }})
+                            <i class="bi bi-calendar-check me-1"></i>Interaksi ({{ $pelanggan->kunjungan->count() }})
                         </a>
                     </li>
                     <li class="nav-item">
@@ -75,13 +75,14 @@
                 <div class="tab-content">
                     <div class="tab-pane fade show active" id="kunjungan">
                         <a href="{{ route('kunjungan.create', ['pelanggan_id' => $pelanggan->id]) }}" class="btn btn-sm btn-telkom mb-3">
-                            <i class="bi bi-plus-circle me-1"></i>Tambah Kunjungan
+                            <i class="bi bi-plus-circle me-1"></i>Tambah Interaksi
                         </a>
                         <div class="table-responsive">
                             <table class="table table-sm">
                                 <thead>
                                     <tr>
                                         <th>Tanggal</th>
+                                        <th>Metode</th>
                                         <th>Tujuan</th>
                                         <th>Petugas</th>
                                         <th>Aksi</th>
@@ -91,8 +92,14 @@
                                     @forelse($pelanggan->kunjungan()->latest()->take(5)->get() as $kunj)
                                     <tr>
                                         <td>{{ $kunj->tanggal_kunjungan->format('d M Y') }}</td>
+                                        <td>
+                                            <span class="badge bg-{{ $kunj->metode_badge }}">
+                                                <i class="bi {{ $kunj->metode_icon }} me-1"></i>
+                                                {{ ucfirst($kunj->metode) }}
+                                            </span>
+                                        </td>
                                         <td>{{ Str::limit($kunj->tujuan, 40) }}</td>
-                                        <td>: {{ $pelanggan->wilayah->nama_wilayah }}</td>
+                                        <td>{{ $kunj->user->name ?? '-' }}</td>
                                         <td>
                                             <a href="{{ route('kunjungan.show', $kunj->id) }}" class="btn btn-sm btn-outline-danger">
                                                 <i class="bi bi-eye"></i>
@@ -101,7 +108,7 @@
                                     </tr>
                                     @empty
                                     <tr>
-                                        <td colspan="4" class="text-center text-muted">Belum ada kunjungan</td>
+                                        <td colspan="5" class="text-center text-muted">Belum ada interaksi</td>
                                     </tr>
                                     @endforelse
                                 </tbody>
@@ -157,11 +164,11 @@
                 <hr>
                 <div class="mb-3">
                     <div class="d-flex justify-content-between mb-1">
-                        <span class="small text-muted">Total Kunjungan</span>
+                        <span class="small text-muted">Total Interaksi</span>
                         <strong>{{ $stats['total_kunjungan'] }}</strong>
                     </div>
                     <div class="d-flex justify-content-between mb-1">
-                        <span class="small text-muted">Kunjungan Terakhir</span>
+                        <span class="small text-muted">Interaksi Terakhir</span>
                         <strong>{{ $stats['last_visit'] ? $stats['last_visit']->format('d M Y') : '-' }}</strong>
                     </div>
                 </div>
