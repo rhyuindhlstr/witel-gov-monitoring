@@ -85,31 +85,53 @@ class AdminDashboardController extends Controller
         $recentPayments = PembayaranPelanggan::with('pelanggan')
             ->latest('tanggal_pembayaran')->take(5)->get();
 
-        // ── 7. GS Performance Stats ──
-        $gsWin           = PeluangProyekGS::where('status_proyek', 'WIN')->count();
-        $gsProspect      = PeluangProyekGS::where('status_proyek', 'PROSPECT')->count();
-        $gsKegiatanValid = PeluangProyekGS::where('status_proyek', 'KEGIATAN_VALID')->count();
-        $gsLose          = PeluangProyekGS::where('status_proyek', 'LOSE')->count();
-        $gsCancel        = PeluangProyekGS::where('status_proyek', 'CANCEL')->count();
+        // ── 7. GS Stats — mirrors HomeGSController exactly ──
+        $gsStatusCount = PeluangProyekGS::selectRaw('status_proyek, COUNT(*) as total')
+            ->groupBy('status_proyek')->pluck('total', 'status_proyek');
+
+        $gsWin           = $gsStatusCount['WIN']            ?? 0;
+        $gsProspect      = $gsStatusCount['PROSPECT']       ?? 0;
+        $gsKegiatanValid = $gsStatusCount['KEGIATAN_VALID'] ?? 0;
+        $gsLose          = $gsStatusCount['LOSE']           ?? 0;
+        $gsCancel        = $gsStatusCount['CANCEL']         ?? 0;
         $gsTotalProyek   = $gsWin + $gsProspect + $gsKegiatanValid + $gsLose + $gsCancel;
 
-        // GS Charts
+        $gsAktif    = PeluangProyekGS::whereNotIn('status_proyek', ['WIN','LOSE','CANCEL'])->count();
+        $gsSelesai  = PeluangProyekGS::whereIn('status_proyek',  ['WIN','LOSE','CANCEL'])->count();
+
+        // GS Chart Wilayah (vertical bar)
         $gsPeluangWilayah = WilayahGS::withCount('peluangProyekGS')->get();
         $gsChartWilayah   = $gsPeluangWilayah->pluck('peluang_proyek_g_s_count', 'nama_wilayah');
-        $gsChartNilai     = [
-            'estimasi'  => PeluangProyekGS::sum('nilai_estimasi'),
-            'realisasi' => PeluangProyekGS::sum('nilai_realisasi'),
+
+        // GS Chart Nilai — doughnut: Total Proyek vs Proyek Terealisasi
+        $gsChartNilai = [
+            'estimasi'        => PeluangProyekGS::sum('nilai_estimasi'),
+            'realisasi'       => PeluangProyekGS::sum('nilai_realisasi'),
+            'count_total'     => PeluangProyekGS::count(),
+            'count_realisasi' => PeluangProyekGS::where('nilai_realisasi', '>', 0)->count(),
         ];
 
-        // GS Aktivitas Terbaru (today)
-        $gsAktivitasTerbaru = AktivitasMarketing::with(['peluang'])
-            ->whereDate('tanggal', Carbon::today())->latest('tanggal')->limit(10)->get();
+        // GS Financial Overview card (Estimasi vs Realisasi + Achievement %)
+        $gsFinancialData = [
+            'estimasi'     => $gsChartNilai['estimasi'],
+            'realisasi'    => $gsChartNilai['realisasi'],
+            'total_proyek' => $gsChartNilai['count_total'],
+            'percentage'   => $gsChartNilai['estimasi'] > 0
+                ? ($gsChartNilai['realisasi'] / $gsChartNilai['estimasi']) * 100 : 0,
+            'has_trend'    => false,
+            'trend_value'  => 0,
+            'trend_label'  => 'semua waktu',
+        ];
 
-        // GS Win Rate per bulan (untuk chart trend GS)
-        $gsMonthlyWin = PeluangProyekGS::selectRaw('MONTH(created_at) as m, COUNT(*) as total')
-            ->where('status_proyek', 'WIN')->whereYear('created_at', now()->year)
-            ->groupBy('m')->pluck('total', 'm')->all();
-        $gsWinTrend = array_map(fn($i) => (int)($gsMonthlyWin[$i] ?? 0), range(1, 12));
+        // GS Top 5 AM Leaderboard
+        $gsTopAMs = PeluangProyekGS::selectRaw("nama_am, COUNT(*) as total_proyek, SUM(CASE WHEN status_proyek='WIN' THEN 1 ELSE 0 END) as total_win")
+            ->whereNotNull('nama_am')->where('nama_am', '!=', '')
+            ->groupBy('nama_am')->orderByDesc('total_win')->orderByDesc('total_proyek')
+            ->limit(5)->get();
+
+        // GS Aktivitas Terbaru (today)
+        $gsAktivitasTerbaru = AktivitasMarketing::with(['peluang.wilayah', 'peluang'])
+            ->whereDate('tanggal', Carbon::today())->latest()->limit(10)->get();
 
         return view('admin.dashboard', compact(
             // User stats
@@ -127,7 +149,9 @@ class AdminDashboardController extends Controller
             'recentPayments', 'startDate', 'endDate',
             // GS stats
             'gsWin', 'gsProspect', 'gsKegiatanValid', 'gsLose', 'gsCancel', 'gsTotalProyek',
-            'gsChartWilayah', 'gsChartNilai', 'gsAktivitasTerbaru', 'gsWinTrend'
+            'gsAktif', 'gsSelesai',
+            'gsChartWilayah', 'gsChartNilai', 'gsPeluangWilayah',
+            'gsFinancialData', 'gsTopAMs', 'gsAktivitasTerbaru'
         ));
     }
 }

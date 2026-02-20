@@ -299,30 +299,127 @@
     </div>
 
     {{-- ════════════════════════════════════════════
-         5. GS CHARTS ROW
+         5. GS — Financial Performance Overview
     ════════════════════════════════════════════ --}}
     <p class="text-uppercase small fw-bold text-muted ls-1 mb-3">GS — Project Analytics</p>
-    <div class="row mb-4">
-        {{-- Win Trend per Bulan --}}
-        <div class="col-xl-6 col-lg-6 mb-4">
-            <div class="card shadow-sm h-100" style="border-radius:16px;">
-                <div class="card-header py-3 px-4 bg-white border-bottom-0" style="border-radius:16px 16px 0 0;">
-                    <h6 class="m-0 fw-bold text-dark">Trend WIN per Bulan ({{ now()->year }})</h6>
+
+    {{-- Financial Overview Card --}}
+    <div class="card border-0 shadow-sm mb-4" style="border-radius:16px;">
+        <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-start mb-4">
+                <div>
+                    <h5 class="fw-bold text-dark mb-1">Performance Overview GS</h5>
+                    <small class="text-muted">Ringkasan finansial proyek berdasarkan estimasi vs realisasi (semua waktu)</small>
                 </div>
-                <div class="card-body" style="height:280px;">
-                    <canvas id="gsWinTrendChart"></canvas>
+                <div class="d-flex gap-2">
+                    <span class="badge rounded-pill text-bg-light border px-3 py-2">
+                        <i class="bi bi-check2-circle me-1 text-success"></i>
+                        {{ $gsAktif }} Aktif &nbsp;·&nbsp; {{ $gsSelesai }} Selesai
+                    </span>
+                </div>
+            </div>
+            <div class="row align-items-center">
+                <div class="col-md-5 border-end">
+                    <div class="mb-4">
+                        <small class="text-uppercase text-muted fw-bold" style="font-size:11px;letter-spacing:1px;">Total Estimasi</small>
+                        <h3 class="fw-bold text-dark mb-0">Rp {{ number_format($gsFinancialData['estimasi'],0,',','.') }}</h3>
+                    </div>
+                    <div>
+                        <small class="text-uppercase text-muted fw-bold" style="font-size:11px;letter-spacing:1px;">Total Realisasi</small>
+                        <h3 class="fw-bold text-success mb-0">Rp {{ number_format($gsFinancialData['realisasi'],0,',','.') }}</h3>
+                    </div>
+                </div>
+                <div class="col-md-7 ps-md-5">
+                    <div class="d-flex justify-content-between align-items-end mb-2">
+                        <span class="fw-bold text-dark">Achievement Rate</span>
+                        <span class="fw-bold fs-4 {{ $gsFinancialData['percentage'] >= 100 ? 'text-success' : 'text-primary' }}">
+                            {{ number_format($gsFinancialData['percentage'],1) }}%
+                        </span>
+                    </div>
+                    <div class="progress mb-3" style="height:10px;border-radius:20px;background:#f1f3f5;">
+                        <div class="progress-bar {{ $gsFinancialData['percentage'] >= 100 ? 'bg-success' : 'bg-primary' }}"
+                             style="width:{{ min($gsFinancialData['percentage'],100) }}%;border-radius:20px;"></div>
+                    </div>
+                    <small class="text-muted">Berdasarkan {{ $gsFinancialData['total_proyek'] }} total proyek terdaftar</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- GS Charts: Wilayah + Proporsi Status + Top 5 AM --}}
+    <div class="row g-4 mb-4">
+        {{-- Left col (col-xl-8): Wilayah Bar + Proporsi Doughnut --}}
+        <div class="col-xl-8">
+            <div class="row g-4">
+                {{-- Sebaran Proyek per Wilayah (vertical bar — same as GS dashboard) --}}
+                <div class="col-md-6">
+                    <div class="card border-0 shadow-sm h-100" style="border-radius:16px;">
+                        <div class="card-header bg-white border-0 pt-4 px-4">
+                            <h6 class="fw-bold mb-0">Sebaran Proyek per Wilayah</h6>
+                        </div>
+                        <div class="card-body px-4 pb-4">
+                            <div style="height:250px;position:relative;">
+                                <canvas id="gsWilayahChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{-- Proporsi Status Proyek (doughnut — same as GS dashboard) --}}
+                <div class="col-md-6">
+                    <div class="card border-0 shadow-sm h-100" style="border-radius:16px;">
+                        <div class="card-header bg-white border-0 pt-4 px-4">
+                            <h6 class="fw-bold mb-0">Proporsi Status Proyek</h6>
+                        </div>
+                        <div class="card-body px-4 pb-4">
+                            <div style="height:250px;position:relative;">
+                                <canvas id="gsNilaiChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        {{-- Peluang per Wilayah --}}
-        <div class="col-xl-6 col-lg-6 mb-4">
-            <div class="card shadow-sm h-100" style="border-radius:16px;">
-                <div class="card-header py-3 px-4 bg-white border-bottom-0" style="border-radius:16px 16px 0 0;">
-                    <h6 class="m-0 fw-bold text-dark">Peluang Proyek per Wilayah</h6>
+        {{-- Right col (col-xl-4): Top 5 AM Leaderboard --}}
+        <div class="col-xl-4">
+            <div class="card border-0 shadow-sm h-100" style="border-radius:16px;">
+                <div class="card-header bg-white border-0 pt-4 px-4 pb-3">
+                    <h5 class="fw-bold mb-0" style="color:#2d3436;">Top 5 Account Manager</h5>
+                    <small class="text-muted">Berdasarkan Proyek WIN & Total Proyek</small>
                 </div>
-                <div class="card-body" style="height:280px;">
-                    <canvas id="gsWilayahChart"></canvas>
+                <div class="card-body px-4 pb-4">
+                    @foreach($gsTopAMs as $index => $am)
+                    @php
+                        $rank = $index + 1;
+                        $badgeBg    = match($rank) { 1=>'#d1e7dd', 2=>'#cfe2ff', 3=>'#e0cffc', default=>'#f8f9fa' };
+                        $badgeColor = match($rank) { 1=>'#0f5132', 2=>'#084298', 3=>'#3d0a91', default=>'#6c757d' };
+                        $pct = $gsChartNilai['count_total'] > 0 ? ($am->total_proyek / $gsChartNilai['count_total']) * 100 : 0;
+                    @endphp
+                    <div class="d-flex align-items-center mb-3" style="{{ !$loop->last ? 'border-bottom:1px solid #f1f3f5;padding-bottom:12px;' : '' }}">
+                        <div class="d-flex align-items-center justify-content-center rounded-circle me-3 flex-shrink-0"
+                             style="width:32px;height:32px;background:{{ $badgeBg }};color:{{ $badgeColor }};font-weight:bold;font-size:14px;">
+                            {{ $rank }}
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <span class="fw-bold text-dark" style="font-size:14px;">{{ $am->nama_am }}</span>
+                                <div class="text-end">
+                                    <span class="fw-bold text-dark" style="font-size:15px;">{{ $am->total_proyek }}</span>
+                                    <small class="text-muted ms-1" style="font-size:11px;">Proyek</small>
+                                    @if($am->total_win > 0)
+                                        <span class="badge bg-success ms-2" style="font-size:10px;padding:3px 6px;">{{ $am->total_win }} WIN</span>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="progress" style="height:6px;background:#f8f9fa;border-radius:10px;">
+                                <div class="progress-bar" style="width:{{ $pct }}%;background:#e30613;border-radius:10px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+                    @if($gsTopAMs->isEmpty())
+                        <p class="text-muted text-center small mt-3">Belum ada data AM</p>
+                    @endif
                 </div>
             </div>
         </div>
@@ -527,48 +624,57 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // ── GS Win Trend Line Chart ──
-    const gsWinCtx = document.getElementById('gsWinTrendChart').getContext('2d');
-    const gsGrad = gsWinCtx.createLinearGradient(0,0,0,200);
-    gsGrad.addColorStop(0,'rgba(34,197,94,0.2)'); gsGrad.addColorStop(1,'rgba(34,197,94,0)');
-    new Chart(gsWinCtx, {
-        type: 'line',
-        data: {
-            labels: ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'],
-            datasets:[{
-                label:'WIN',
-                data: @json($gsWinTrend),
-                borderColor:'#22c55e', backgroundColor:gsGrad,
-                pointRadius:4, pointHoverRadius:8,
-                pointBackgroundColor:'#fff', pointBorderColor:'#22c55e', pointBorderWidth:2,
-                tension:0.45, fill:true, borderWidth:2.5
-            }]
-        },
-        options: {
-            maintainAspectRatio:false,
-            plugins:{legend:{display:false},tooltip:{backgroundColor:'#fff',titleColor:'#1e293b',bodyColor:'#475569',borderColor:'#e2e8f0',borderWidth:1,padding:10}},
-            scales:{x:{grid:{display:false},ticks:{color:'#94a3b8'}},y:{beginAtZero:true,grid:{color:'#f1f5f9'},ticks:{color:'#64748b',stepSize:1}}}
-        }
-    });
 
-    // ── GS Peluang per Wilayah (Horizontal Bar) ──
+    // ── GS Sebaran Proyek per Wilayah (Vertical Bar — same as GS dashboard) ──
     const wilayahCtx = document.getElementById('gsWilayahChart').getContext('2d');
     new Chart(wilayahCtx, {
         type: 'bar',
         data: {
             labels: {!! json_encode($gsChartWilayah->keys()) !!},
             datasets:[{
-                label:'Jumlah Proyek',
-                data:{!! json_encode($gsChartWilayah->values()) !!},
-                backgroundColor:'#EF4444', hoverBackgroundColor:'#DC2626',
-                borderRadius:5, barThickness:20
+                label: 'Jumlah Proyek',
+                data: {!! json_encode($gsChartWilayah->values()) !!},
+                backgroundColor: '#e30613',
+                borderRadius: 4,
+                barThickness: 20
             }]
         },
         options: {
-            indexAxis:'y',
-            maintainAspectRatio:false,
-            plugins:{legend:{display:false},tooltip:{backgroundColor:'#fff',titleColor:'#1e293b',bodyColor:'#475569',borderColor:'#e2e8f0',borderWidth:1}},
-            scales:{x:{beginAtZero:true,grid:{display:false}},y:{grid:{display:false}}}
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                y: { beginAtZero: true, grid: { borderDash: [2,4] } },
+                x: { grid: { display: false } }
+            }
+        }
+    });
+
+    // ── GS Proporsi Status Proyek (Doughnut — same as GS dashboard) ──
+    const nilaiCtx = document.getElementById('gsNilaiChart').getContext('2d');
+    new Chart(nilaiCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Total Proyek', 'Proyek Terealisasi'],
+            datasets:[{
+                data: [{{ $gsChartNilai['count_total'] }}, {{ $gsChartNilai['count_realisasi'] }}],
+                backgroundColor: ['#e9ecef', '#198754'],
+                hoverBackgroundColor: ['#dee2e6', '#157347'],
+                hoverBorderColor: 'rgba(234,236,244,1)',
+                cutout: '70%'
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: true, position: 'bottom', labels: { usePointStyle: true, padding: 20 } },
+                tooltip: {
+                    callbacks: {
+                        label: function(ctx) {
+                            return (ctx.label || '') + ': ' + ctx.raw + ' Proyek';
+                        }
+                    }
+                }
+            }
         }
     });
 });
