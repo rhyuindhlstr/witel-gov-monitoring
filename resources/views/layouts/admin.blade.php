@@ -66,6 +66,7 @@
 
         body.sb-sidenav-toggled #sidebar-wrapper .sidebar-brand h4,
         body.sb-sidenav-toggled #sidebar-wrapper .sidebar-brand small,
+        body.sb-sidenav-toggled #sidebar-wrapper .sidebar-brand .sidebar-brand-text,
         body.sb-sidenav-toggled #sidebar-wrapper .sidebar-menu span {
             display: none;
             opacity: 0;
@@ -84,15 +85,33 @@
 
         /* Brand */
         .sidebar-brand {
-            height: var(--header-height);
+            min-height: 120px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 0 1rem;
+            padding: 1rem;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             background: rgba(0, 0, 0, 0.05);
             white-space: nowrap;
+            transition: all var(--transition-speed);
+        }
+
+        .sidebar-logo-img {
+            width: 100px;
+            height: auto;
+            margin-bottom: 10px;
+            transition: all var(--transition-speed);
+        }
+
+        body.sb-sidenav-toggled #sidebar-wrapper .sidebar-logo-img {
+            width: 40px;
+            margin-bottom: 0;
+        }
+
+        body.sb-sidenav-toggled #sidebar-wrapper .sidebar-brand {
+            min-height: var(--header-height);
+            padding: 0.5rem;
         }
 
         .sidebar-brand h4 {
@@ -404,8 +423,11 @@
         <!-- Sidebar -->
         <div id="sidebar-wrapper">
             <div class="sidebar-brand">
-                <h4>Monitoring Gov</h4>
-                <small>Telkom Witel Lampung-Bengkulu</small>
+                <img src="{{ asset('img/telkom-original.png') }}" alt="Telkom Logo" class="sidebar-logo-img">
+                <div class="sidebar-brand-text text-center">
+                    <h4>Monitoring Gov</h4>
+                    <small>Telkom Witel Lampung-Bengkulu</small>
+                </div>
             </div>
 
             <nav class="sidebar-menu">
