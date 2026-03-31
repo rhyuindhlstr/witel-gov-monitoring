@@ -39,13 +39,26 @@ class PeluangProyekGSImport implements ToModel, WithHeadingRow
     }
 
     /**
-     * Helper untuk konversi tanggal Excel ke format Y-m-d
+     * Helper untuk konversi tanggal Excel ke format Y-m-d.
+     * Mendukung dua format:
+     *  1. Angka serial Excel (mis. 45307) → dikonversi via PhpSpreadsheet
+     *  2. String teks (mis. '2025-01-15', '15/01/2025') → di-parse langsung Carbon
      */
     private function transformDate($value)
     {
         if (!$value) return null;
+
         try {
-            return \Carbon\Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($value));
+            // Angka serial Excel
+            if (is_numeric($value)) {
+                return \Carbon\Carbon::instance(
+                    \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject((float) $value)
+                )->format('Y-m-d');
+            }
+
+            // String teks tanggal (Y-m-d, d/m/Y, d-m-Y, dll.)
+            return \Carbon\Carbon::parse($value)->format('Y-m-d');
+
         } catch (\Exception $e) {
             return null;
         }

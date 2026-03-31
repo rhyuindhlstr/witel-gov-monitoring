@@ -44,7 +44,7 @@ class PembayaranPelangganController extends Controller
             $query->byDateRange($request->start_date, $request->end_date);
         }
         
-        $pembayarans = $query->latest('tanggal_pembayaran')->paginate(20);
+        $pembayarans = $query->latest('tanggal_pembayaran')->paginate(20)->withQueryString();
         $pelanggans = Pelanggan::all();
         
         return view('ssgs.pembayaran.index', compact('pembayarans', 'pelanggans'));

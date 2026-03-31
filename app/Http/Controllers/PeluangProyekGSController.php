@@ -27,25 +27,44 @@ public function import(Request $request)
     ]);
 
     try {
-        Excel::import(new PeluangProyekGSImport, $request->file('file'));
-        return redirect()->route('peluang-gs.index')->with('success', 'Data Peluang Proyek berhasil diimport!');
+        $importer = new PeluangProyekGSImport;
+        Excel::import($importer, $request->file('file'));
+
+        $jumlah = PeluangProyekGS::latest()->take(9999)->count();
+
+        return redirect()
+            ->route('peluang-gs.index')
+            ->with('success', 'Data Peluang Proyek berhasil diimport! Total data sekarang: ' . $jumlah . ' proyek.');
+
     } catch (\Exception $e) {
-        return redirect()->back()->with('error', 'Gagal mengimport data: ' . $e->getMessage());
+        return redirect()
+            ->back()
+            ->with('error', 'Gagal mengimport data: ' . $e->getMessage());
     }
 }
+
     public function index(Request $request)
     {
-        $peluang = PeluangProyekGS::with('wilayah')
+        $query = PeluangProyekGS::with('wilayah')
             ->when($request->status, fn($q) =>
                 $q->where('status_proyek', $request->status))
             ->when($request->wilayah, fn($q) =>
                 $q->where('wilayah_id', $request->wilayah))
-            ->latest()
-            ->get();
+            ->when($request->tahun, fn($q) =>
+                $q->whereYear('start_pelaksanaan', $request->tahun))
+            ->latest();
 
+        $peluang  = $query->paginate(15)->withQueryString();
         $wilayahs = WilayahGS::all();
 
-        return view('peluang-gs.index', compact('peluang', 'wilayahs'));
+        // Ambil daftar tahun yang tersedia untuk dropdown
+        $tahuns = PeluangProyekGS::selectRaw('YEAR(start_pelaksanaan) as tahun')
+            ->whereNotNull('start_pelaksanaan')
+            ->distinct()
+            ->orderBy('tahun', 'desc')
+            ->pluck('tahun');
+
+        return view('peluang-gs.index', compact('peluang', 'wilayahs', 'tahuns'));
     }
 
     public function create()

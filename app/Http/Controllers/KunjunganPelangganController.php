@@ -43,9 +43,19 @@ class KunjunganPelangganController extends Controller
         $users = User::where('email', '!=', 'admin@telkom.com')->get();
 
         // Fetch tertunda payments
-        $delayedPayments = \App\Models\PembayaranPelanggan::with(['pelanggan'])
-                                ->tertunda()
-                                ->orderBy('tanggal_jatuh_tempo', 'asc')
+        // delayed payments list also should respect any filters applied on the page
+        $delayedQuery = \App\Models\PembayaranPelanggan::with(['pelanggan'])
+                                ->tertunda();
+
+        // apply same filters as interaksi query
+        if ($request->filled('pelanggan_id')) {
+            $delayedQuery->where('pelanggan_id', $request->pelanggan_id);
+        }
+        if ($request->filled('start_date') && $request->filled('end_date')) {
+            $delayedQuery->byDateRange($request->start_date, $request->end_date);
+        }
+
+        $delayedPayments = $delayedQuery->orderBy('tanggal_jatuh_tempo', 'asc')
                                 ->get()
                                 ->filter(function ($payment) {
                                     // Skip if due date is null

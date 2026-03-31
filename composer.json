@@ -15,10 +15,11 @@
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
         "laravel/ui": "*",
-        "maatwebsite/excel": "^3.1"
+        "maatwebsite/excel": "^3.1",
+        "maennchen/zipstream-php": "2.1",
+        "psr/http-message": "1.1"
     },
     "require-dev": {
-        "beyondcode/laravel-er-diagram-generator": "^5.0",
         "fakerphp/faker": "^1.23",
         "laravel/breeze": "^2.3",
         "laravel/pail": "^1.2.2",
@@ -88,6 +89,9 @@
         "allow-plugins": {
             "pestphp/pest-plugin": true,
             "php-http/discovery": true
+        },
+        "platform": {
+            "php-64bit": "8.3"
         }
     },
     "minimum-stability": "stable",

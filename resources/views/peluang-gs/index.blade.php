@@ -103,7 +103,7 @@
                         <label class="form-label-dashboard">Tahun</label>
                         <select name="tahun" class="form-control-dashboard" onchange="handleFilter(this)">
                             <option value="">Semua Tahun</option>
-                            @foreach($peluang->pluck('start_pelaksanaan')->filter()->map(fn($d)=>date('Y',strtotime($d)))->unique() as $t)
+                            @foreach($tahuns as $t)
                                 <option value="{{ $t }}" {{ request('tahun') == $t ? 'selected' : '' }}>
                                     {{ $t }}
                                 </option>
@@ -291,7 +291,54 @@
             </tbody>
         </table>
     </div>
+
+    {{-- PAGINATION + INFO --}}
+    @if($peluang->hasPages())
+    <div class="d-flex align-items-center justify-content-between px-3 py-3"
+         style="border-top:1px solid #f1f3f5;">
+
+        {{-- Info jumlah --}}
+        <div style="font-size:13px;color:#6c757d;">
+            Menampilkan
+            <strong>{{ $peluang->firstItem() }}</strong>–<strong>{{ $peluang->lastItem() }}</strong>
+            dari <strong>{{ $peluang->total() }}</strong> proyek
+            @if(request()->hasAny(['status','wilayah','tahun']))
+                <span class="badge ms-1" style="background:#fee2e2;color:#b91c1c;font-size:11px;">
+                    <i class="bi bi-funnel-fill"></i> Terfilter
+                </span>
+            @endif
+        </div>
+
+        {{-- Tombol halaman --}}
+        <div class="d-flex align-items-center gap-1">
+            {{-- Prev --}}
+            @if($peluang->onFirstPage())
+                <span class="btn-page btn-page-disabled"><i class="bi bi-chevron-left"></i></span>
+            @else
+                <a href="{{ $peluang->previousPageUrl() }}" class="btn-page"><i class="bi bi-chevron-left"></i></a>
+            @endif
+
+            {{-- Nomor halaman --}}
+            @foreach($peluang->getUrlRange(max(1, $peluang->currentPage()-2), min($peluang->lastPage(), $peluang->currentPage()+2)) as $page => $url)
+                @if($page == $peluang->currentPage())
+                    <span class="btn-page btn-page-active">{{ $page }}</span>
+                @else
+                    <a href="{{ $url }}" class="btn-page">{{ $page }}</a>
+                @endif
+            @endforeach
+
+            {{-- Next --}}
+            @if($peluang->hasMorePages())
+                <a href="{{ $peluang->nextPageUrl() }}" class="btn-page"><i class="bi bi-chevron-right"></i></a>
+            @else
+                <span class="btn-page btn-page-disabled"><i class="bi bi-chevron-right"></i></span>
+            @endif
+        </div>
+    </div>
+    @endif
+
 </div>
+
 
 
 @if(session('success_update'))
@@ -305,6 +352,32 @@ Swal.fire({
 });
 </script>
 @endif
+
+@if(session('success'))
+<script>
+Swal.fire({
+    icon: 'success',
+    title: 'Import Berhasil!',
+    html: '<p style="font-size:15px">{{ session("success") }}</p>',
+    timer: 3500,
+    showConfirmButton: false,
+    timerProgressBar: true,
+});
+</script>
+@endif
+
+@if(session('error'))
+<script>
+Swal.fire({
+    icon: 'error',
+    title: 'Import Gagal!',
+    html: '<p style="font-size:14px;text-align:left">{{ session("error") }}</p>',
+    confirmButtonColor: '#b30000',
+    confirmButtonText: 'Tutup',
+});
+</script>
+@endif
+
 <script>
 document.querySelectorAll('.form-delete').forEach(form => {
     form.addEventListener('submit', function(e){
@@ -509,5 +582,42 @@ function handleFilter(selectElement) {
     @keyframes shimmer {
         100% { transform: translateX(100%); }
     }
+
+    /* Pagination */
+    .btn-page {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 34px;
+        height: 34px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 500;
+        text-decoration: none;
+        color: var(--color-text-primary);
+        background: var(--color-bg-card);
+        border: 1px solid var(--color-border);
+        transition: all .15s ease;
+    }
+    .btn-page:hover {
+        background: #fff5f5;
+        border-color: #fca5a5;
+        color: #b30000;
+    }
+    .btn-page-active {
+        background: #b30000 !important;
+        border-color: #b30000 !important;
+        color: #fff !important;
+        cursor: default;
+    }
+    .btn-page-disabled {
+        opacity: .4;
+        cursor: not-allowed;
+        pointer-events: none;
+        background: var(--color-bg-card);
+        border: 1px solid var(--color-border);
+        color: var(--color-text-secondary);
+    }
 </style>
 @endpush
+

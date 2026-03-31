@@ -139,14 +139,25 @@
                 </div>
                 
                 <!-- Pagination -->
-                <div class="d-flex justify-content-between align-items-center mt-4">
-                    <div class="text-muted">
-                        Menampilkan {{ $pembayarans->firstItem() ?? 0 }} - {{ $pembayarans->lastItem() ?? 0 }} dari {{ $pembayarans->total() }} data
+                <div class="d-flex justify-content-between align-items-center mt-4 flex-wrap gap-2">
+                    <div class="text-muted" style="font-size:13px;">
+                        Menampilkan
+                        <strong>{{ $pembayarans->firstItem() ?? 0 }}</strong>–<strong>{{ $pembayarans->lastItem() ?? 0 }}</strong>
+                        dari <strong>{{ $pembayarans->total() }}</strong> data
+                        @if(request()->hasAny(['pelanggan_id','status','start_date','end_date']))
+                            <span class="badge ms-1" style="background:#fee2e2;color:#b91c1c;font-size:11px;">
+                                <i class="bi bi-funnel-fill"></i> Terfilter
+                            </span>
+                            <a href="{{ route('pembayaran.index') }}" class="ms-2 text-secondary" style="font-size:12px;">
+                                <i class="bi bi-x-circle"></i> Reset filter
+                            </a>
+                        @endif
                     </div>
                     <div>
                         {{ $pembayarans->links() }}
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
